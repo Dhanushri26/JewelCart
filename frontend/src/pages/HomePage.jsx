@@ -30,7 +30,7 @@ export function HomePage() {
       setLoading(false);
     }
   };
-
+ 
   fetchProducts();
 }, []);
 useEffect(() => {
