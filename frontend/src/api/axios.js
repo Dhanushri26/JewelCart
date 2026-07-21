@@ -1,7 +1,13 @@
 import axios from "axios";
 import { fetchAuthSession } from "aws-amplify/auth";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
+console.log("VITE_API_BASE_URL =", import.meta.env.VITE_API_BASE_URL);
+
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com";
+
+console.log("Using BASE_URL =", BASE_URL);
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -9,7 +15,6 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-
 /**
  * Decode a JWT payload without verifying the signature.
  * Cognito ID token carries: sub, email, cognito:groups[], etc.

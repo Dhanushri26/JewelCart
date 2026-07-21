@@ -2,7 +2,7 @@
 
 > Auto-generated documentation of all frontend↔backend endpoint connections.
 > **Last updated:** 2026-07-09
-> **API Gateway:** `https://k5piu4f4k3.execute-api.ap-southeast-1.amazonaws.com`
+> **API Gateway:** `https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com`
 > **Auth:** AWS Cognito User Pool `ap-southeast-1_zGjdn5K3U` · Client `cpppgh9rt7kj1t3i5paej5526`
 
 ---

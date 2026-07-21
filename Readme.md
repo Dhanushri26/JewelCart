@@ -14,10 +14,9 @@ JewelCart is a production-ready, cloud-native luxury jewelry e-commerce platform
                        │ HTTPS + JWT Bearer Token
                        │ + x-user-id / x-user-role headers
                        ▼
-┌─────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────          ┐
 │         AWS API Gateway (Single Entry Point)     │
-│  https://k5piu4f4k3.execute-api.ap-southeast-1  │
-│            .amazonaws.com                        │
+│https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com│
 └──┬──────────┬──────────┬───────────┬────────────┘
    │          │          │           │           │
    ▼          ▼          ▼           ▼           ▼
@@ -113,7 +112,7 @@ JewelCart/
 
 > See [API_ENDPOINTS.md](./API_ENDPOINTS.md) for the full connection log.
 
-**Base URL:** `https://k5piu4f4k3.execute-api.ap-southeast-1.amazonaws.com`
+**Base URL:** `https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com`
 
 ### Products
 | Method | Path | Auth | Description |
