@@ -158,7 +158,7 @@ jobs:
           working-directory: frontend
 
       - name: Run Trivy filesystem scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.28.1
         with:
           scan-type: 'fs'
           scan-ref: '.'
