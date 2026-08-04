@@ -134,6 +134,9 @@ jobs:
           cd "$GITHUB_WORKSPACE/frontend"
           npm install --no-audit --no-fund
 
+      - name: Set Snyk working directory
+        run: echo "SNYK_WORKDIR=$GITHUB_WORKSPACE/frontend" >> "$GITHUB_ENV"
+
       - name: Run npm audit
         run: |
           npm audit --audit-level=high --omit=dev || true
@@ -146,7 +149,9 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high --sarif-file-output=snyk-opensource.sarif
-          working-directory: frontend
+          command: test
+          json: false
+          entryPoint: /bin/sh
 
       - name: Run Snyk Code Scan
         uses: snyk/actions/node@master
@@ -155,7 +160,9 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high --sarif-file-output=snyk-code.sarif --code
-          working-directory: frontend
+          command: code test
+          json: false
+          entryPoint: /bin/sh
 
       - name: Run Trivy filesystem scan
         uses: aquasecurity/trivy-action@master
