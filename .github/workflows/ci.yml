@@ -206,7 +206,7 @@ jobs:
           else
             npm install --no-audit --no-fund --include=optional
           fi
-          npm install --no-save @rolldown/binding-linux-x64-gnu@1.1.5 lightningcss-linux-x64-gnu@1.32.0
+          npm install --no-save @rolldown/binding-linux-x64-gnu@1.1.5 lightningcss-linux-x64-gnu@1.32.0 @tailwindcss/oxide-linux-x64-gnu@4.3.2
           npm rebuild rolldown lightningcss
 
       - name: Build frontend
