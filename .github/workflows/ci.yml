@@ -48,12 +48,8 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd frontend
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          cd "$GITHUB_WORKSPACE/frontend"
+          npm install --no-audit --no-fund
 
       - name: Run ESLint
         run: npm run lint
@@ -111,12 +107,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd "backend/${{ matrix.service }}"
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          cd "$GITHUB_WORKSPACE/backend/${{ matrix.service }}"
+          npm install --no-audit --no-fund
 
       - name: Run backend lint checks
         run: |
@@ -139,12 +131,8 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd frontend
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          cd "$GITHUB_WORKSPACE/frontend"
+          npm install --no-audit --no-fund
 
       - name: Run npm audit
         run: |
@@ -220,12 +208,8 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd frontend
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          cd "$GITHUB_WORKSPACE/frontend"
+          npm install --no-audit --no-fund
 
       - name: Build frontend
         run: npm run build
@@ -235,12 +219,8 @@ jobs:
         run: |
           for dir in backend/cart-service backend/product-service backend/inventory-service backend/payment-service backend/order-service; do
             (
-              cd "$dir"
-              if [ -f package-lock.json ]; then
-                npm ci
-              else
-                npm install
-              fi
+              cd "$GITHUB_WORKSPACE/$dir"
+              npm install --no-audit --no-fund
             )
           done
 
