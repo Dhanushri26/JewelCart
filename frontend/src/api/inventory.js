@@ -26,11 +26,18 @@ export const getInventoryByProduct = async (productId) => {
  * Create an inventory record for a product (admin only).
  * @param {object} data - { productId, availableQuantity, reservedQuantity, damagedQuantity, reorderThreshold, inventoryStatus }
  */
+<<<<<<< HEAD
 export const createInventoryRecord = async (data) => {
   const response = await api.post("/inventory", data);
   return response.data;
 };
 
+=======
+export const createInventory = async (data) => {
+    const response = await api.post("/inventory", data);
+    return response.data;
+};
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 /**
  * Reserve stock for a product (admin/business only).
  * @param {object} data - { productId, requestedQuantity }
@@ -40,3 +47,15 @@ export const reserveInventory = async (data) => {
   const response = await api.patch("/inventory/reserve", data);
   return response.data;
 };
+<<<<<<< HEAD
+=======
+
+export const updateInventory = async (productId, data) => {
+  const response = await api.put(
+    `/inventory/${productId}`,
+    data
+  );
+
+  return response.data;
+};
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905

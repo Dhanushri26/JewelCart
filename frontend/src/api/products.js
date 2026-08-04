@@ -22,11 +22,39 @@ export const getProductById = async (productId) => {
   return response.data;
 };
 
+<<<<<<< HEAD
+=======
+
+export const createProduct = async (data) => {
+  const response = await api.post("/products", data);
+  return response.data;
+};  
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 /**
  * Normalize a Lambda product record to the frontend shape used by pages.
  * Lambda returns: { productId, title, msrp, isActive, ... }
  * Frontend expects: { id, name, price, image, ... }
+<<<<<<< HEAD
  */
+=======
+ * 
+ * 
+ * 
+ */
+
+
+export async function updateProduct(productId, body) {
+
+    const response = await api.put(
+        `/products/${productId}`,
+        body
+    );
+
+    return response.data;
+
+}
+
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 export const normalizeProduct = (p) => ({
   ...p,
   id: p.productId ?? p.id,

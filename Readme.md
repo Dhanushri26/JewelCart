@@ -14,10 +14,16 @@ JewelCart is a production-ready, cloud-native luxury jewelry e-commerce platform
                        │ HTTPS + JWT Bearer Token
                        │ + x-user-id / x-user-role headers
                        ▼
+<<<<<<< HEAD
 ┌─────────────────────────────────────────────────┐
 │         AWS API Gateway (Single Entry Point)     │
 │  https://k5piu4f4k3.execute-api.ap-southeast-1  │
 │            .amazonaws.com                        │
+=======
+┌─────────────────────────────────────────────────          ┐
+│         AWS API Gateway (Single Entry Point)     │
+│https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com│
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 └──┬──────────┬──────────┬───────────┬────────────┘
    │          │          │           │           │
    ▼          ▼          ▼           ▼           ▼
@@ -53,6 +59,7 @@ JewelCart/
 │       ├── amplifyConfig.js     # Cognito configuration
 │       └── main.jsx             # Entry point
 │
+<<<<<<< HEAD
 ├── backend/
 │   ├── cart-service/
 │   ├── cart.js                  # AWS Lambda handler
@@ -71,6 +78,25 @@ JewelCart/
 │   └── shared.js
 │
 │   └── inventory-service/
+=======
+├── cart-service/
+│   ├── cart.js                  # AWS Lambda handler
+│   └── shared.js                # DynamoDB client + utilities
+│
+├── product-service/
+│   ├── products.js              # AWS Lambda handler
+│   └── shared.js
+│
+├── order-service/
+│   ├── orders.js                # AWS Lambda handler (+ SQS pub)
+│   └── shared.js
+│
+├── payment-service/
+│   ├── payments.js              # AWS Lambda handler (+ SNS pub)
+│   └── shared.js
+│
+├── inventory-service/
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 │   ├── inventory.js             # AWS Lambda handler
 │   └── shared.js
 │
@@ -114,7 +140,11 @@ JewelCart/
 
 > See [API_ENDPOINTS.md](./API_ENDPOINTS.md) for the full connection log.
 
+<<<<<<< HEAD
 **Base URL:** `https://k5piu4f4k3.execute-api.ap-southeast-1.amazonaws.com`
+=======
+**Base URL:** `https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com`
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 
 ### Products
 | Method | Path | Auth | Description |
@@ -208,13 +238,18 @@ npm run dev
 ### Lambda services (local testing)
 Each service is a standalone Lambda. To test locally:
 ```bash
+<<<<<<< HEAD
 cd backend/cart-service
+=======
+cd cart-service
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 npm install
 # Use AWS SAM or serverless-offline for local Lambda invocation
 ```
 
 ---
 
+<<<<<<< HEAD
 ## � CI/CD Pipeline
 
 This repository now includes production-ready GitHub Actions workflows for continuous integration and deployment.
@@ -278,6 +313,9 @@ chmod +x scripts/package-lambda.sh scripts/deploy-lambda.sh scripts/deploy-front
 ---
 
 ## �📦 Frontend Dependencies
+=======
+## 📦 Frontend Dependencies
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 
 | Package | Purpose |
 |---------|---------|

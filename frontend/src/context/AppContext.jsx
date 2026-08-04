@@ -46,7 +46,11 @@ export function AppProvider({ children }) {
   // ── Auth / User ──
   const [user, setUser] = useState(null);
   // user = { userId, email, role, name }
+<<<<<<< HEAD
 
+=======
+const [authLoading, setAuthLoading] = useState(true);
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
   // ── Cart ──
   const [cart, setCart] = useState([]);
   const [cartLoading, setCartLoading] = useState(false);
@@ -79,6 +83,11 @@ export function AppProvider({ children }) {
         });
       } catch {
         // Session unavailable
+<<<<<<< HEAD
+=======
+      } finally {
+        setAuthLoading(false);
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
       }
     }
     loadUser();
@@ -219,6 +228,10 @@ export function AppProvider({ children }) {
     () => ({
       // auth
       user,
+<<<<<<< HEAD
+=======
+      authLoading,
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
       // cart
       cart,
       cartLoading,

@@ -14,7 +14,11 @@ export function CartPage() {
       sum + Number(item.unitPrice ?? item.price ?? 0) * Number(item.quantity ?? 1),
     0
   )
+<<<<<<< HEAD
   const shipping = subtotal > 15000 ? 0 : 650
+=======
+  const shipping = 0
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
   const tax = subtotal * 0.08
   const total = subtotal + shipping + tax
 

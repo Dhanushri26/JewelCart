@@ -9,11 +9,27 @@ import {
   ShoppingBag,
   Users,
 } from "lucide-react";
+<<<<<<< HEAD
+=======
+import { useOutletContext } from "react-router-dom";
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 import { getOrders } from "../api/orders";
 import { getInventory } from "../api/inventory";
 import { getPayments } from "../api/payments";
 import { useAppContext } from "../context/AppContext";
+<<<<<<< HEAD
 
+=======
+import DashboardPanel from "../components/admin/DashboardPanel"
+import ProductsPanel from "../components/admin/ProductsPanel";
+import InventoryPanel from "../components/admin/InventoryPanel";
+import OrdersPanel from "../components/admin/OrdersPanel";
+import PaymentsPanel from "../components/admin/PaymentsPanel";
+import CustomersPanel from "../components/admin/CustomersPanel";
+import AnalyticsPanel from "../components/admin/AnalyticsPanel";
+import SettingsPanel from "../components/admin/SettingsPanel";
+import AdminSidebar from "../components/admin/AdminSidebar";
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 const NAV_ITEMS = [
   "Dashboard",
   "Products",
@@ -37,13 +53,20 @@ const NAV_ICONS = {
 };
 
 export function AdminPage() {
+<<<<<<< HEAD
   const { user } = useAppContext();
+=======
+const { activeNav } = useOutletContext();
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 
   const [orders, setOrders] = useState([]);
   const [inventory, setInventory] = useState([]);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
   const [activeNav, setActiveNav] = useState("Dashboard");
+=======
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 
   useEffect(() => {
     async function loadDashboard() {
@@ -83,7 +106,10 @@ export function AdminPage() {
     payments.length > 0
       ? Math.round((paidPaymentCount / payments.length) * 100)
       : 0;
+<<<<<<< HEAD
 
+=======
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
   const stats = [
     {
       label: "Revenue",
@@ -117,6 +143,7 @@ export function AdminPage() {
     .slice(0, 5);
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-stone-950 text-stone-100">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 lg:flex-row lg:px-8">
 
@@ -247,5 +274,27 @@ export function AdminPage() {
         </main>
       </div>
     </div>
+=======
+
+<>
+    {activeNav === "Dashboard" && (
+            <DashboardPanel
+                  loading={loading}
+                  stats={stats}
+                  recentOrders={recentOrders}
+                  lowStockItems={lowStockItems}
+
+            />
+          )}
+
+          {activeNav === "Products" && <ProductsPanel />}
+          {activeNav === "Inventory" && <InventoryPanel />}
+          {activeNav === "Orders" && <OrdersPanel />}
+          {activeNav === "Payments" && <PaymentsPanel />}
+          {activeNav === "Customers" && <CustomersPanel />}
+          {activeNav === "Analytics" && <AnalyticsPanel />}
+          {activeNav === "Settings" && <SettingsPanel />}
+</>
+>>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
   );
 }
