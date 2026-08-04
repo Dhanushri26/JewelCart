@@ -49,7 +49,11 @@ jobs:
       - name: Install frontend dependencies
         run: |
           cd "$GITHUB_WORKSPACE/frontend"
-          npm install --no-audit --no-fund
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
 
       - name: Run ESLint
         run: npm run lint
@@ -108,7 +112,11 @@ jobs:
       - name: Install dependencies
         run: |
           cd "$GITHUB_WORKSPACE/backend/${{ matrix.service }}"
-          npm install --no-audit --no-fund
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
 
       - name: Run backend lint checks
         run: |
@@ -132,7 +140,11 @@ jobs:
       - name: Install frontend dependencies
         run: |
           cd "$GITHUB_WORKSPACE/frontend"
-          npm install --no-audit --no-fund
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
 
       - name: Set Snyk working directory
         run: echo "SNYK_WORKDIR=$GITHUB_WORKSPACE/frontend" >> "$GITHUB_ENV"
@@ -189,7 +201,11 @@ jobs:
       - name: Install frontend dependencies
         run: |
           cd "$GITHUB_WORKSPACE/frontend"
-          npm install --no-audit --no-fund
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
 
       - name: Build frontend
         run: npm run build
@@ -200,7 +216,11 @@ jobs:
           for dir in backend/cart-service backend/product-service backend/inventory-service backend/payment-service backend/order-service; do
             (
               cd "$GITHUB_WORKSPACE/$dir"
-              npm install --no-audit --no-fund
+              if [ -f package-lock.json ]; then
+                npm ci --no-audit --no-fund
+              else
+                npm install --no-audit --no-fund
+              fi
             )
           done
 
