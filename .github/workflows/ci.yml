@@ -48,6 +48,7 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
+          cd frontend
           if [ -f package-lock.json ]; then
             npm ci
           else
@@ -110,6 +111,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd "backend/${{ matrix.service }}"
           if [ -f package-lock.json ]; then
             npm ci
           else
@@ -137,12 +139,12 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
+          cd frontend
           if [ -f package-lock.json ]; then
             npm ci
           else
             npm install
           fi
-        working-directory: frontend
 
       - name: Run npm audit
         run: |
@@ -218,12 +220,12 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
+          cd frontend
           if [ -f package-lock.json ]; then
             npm ci
           else
             npm install
           fi
-        working-directory: frontend
 
       - name: Build frontend
         run: npm run build
@@ -232,11 +234,14 @@ jobs:
       - name: Install backend dependencies
         run: |
           for dir in backend/cart-service backend/product-service backend/inventory-service backend/payment-service backend/order-service; do
-            if [ -f "$dir/package-lock.json" ]; then
-              (cd "$dir" && npm ci)
-            else
-              (cd "$dir" && npm install)
-            fi
+            (
+              cd "$dir"
+              if [ -f package-lock.json ]; then
+                npm ci
+              else
+                npm install
+              fi
+            )
           done
 
       - name: Package Lambda functions in parallel
