@@ -20,9 +20,9 @@ export default defineConfig({
         target: API_TARGET,
         changeOrigin: true,
         secure: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
-        configure: (proxy) => {
-          proxy.on("proxyRes", (proxyRes, _req, res) => {
+        rewrite: (path: string) => path.replace(/^\/api/, ""),
+        configure: (proxy: any) => {
+          proxy.on("proxyRes", (proxyRes: any, _req: any, res: any) => {
             res.setHeader(
               "Access-Control-Allow-Origin",
               "http://localhost:5173",
