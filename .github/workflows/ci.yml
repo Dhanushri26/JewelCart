@@ -47,7 +47,12 @@ jobs:
             ${{ runner.os }}-frontend-npm-
 
       - name: Install frontend dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
       - name: Run ESLint
         run: npm run lint
@@ -131,7 +136,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install frontend dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
         working-directory: frontend
 
       - name: Run npm audit
@@ -207,7 +217,12 @@ jobs:
             ${{ runner.os }}-build-npm-
 
       - name: Install frontend dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
         working-directory: frontend
 
       - name: Build frontend
