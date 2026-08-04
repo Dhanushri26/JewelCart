@@ -35,6 +35,7 @@ jobs:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: github-actions-jewelcart
+          role-skip-session-tagging: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
