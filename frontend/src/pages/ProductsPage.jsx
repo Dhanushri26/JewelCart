@@ -4,26 +4,17 @@ import { Heart, Search, SlidersHorizontal } from 'lucide-react'
 import { useAppContext } from '../context/AppContext'
 import { getProducts } from '../api/products'
 import {addCartItem} from '../api/cart'
-<<<<<<< HEAD
-=======
 import {useLocation} from 'react-router-dom'
 
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 const categories = ['Jewelry', 'Gemstones', 'Collections', 'New Arrivals']
 
 export function ProductsPage() {
   const [query, setQuery] = useState('')
-<<<<<<< HEAD
-  const [category, setCategory] = useState('All')
-=======
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
   const [sort, setSort] = useState('featured')
   const { addToCart, addToWishlist } = useAppContext()
   const [error, setError] = useState("");
   const [products, setProducts] = useState([]);
 
-<<<<<<< HEAD
-=======
   const location = useLocation();
 
 const getInitialCategory = () => {
@@ -48,7 +39,6 @@ useEffect(() => {
 }, [location.pathname]);
 
 
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
  useEffect(() => {
   const fetchProducts = async () => {
     try {
@@ -59,10 +49,6 @@ useEffect(() => {
   name: product.title,
   price: product.msrp,
 }));
-<<<<<<< HEAD
-setProducts(items);
-=======
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
       setProducts(items);
     } catch (err) {
       console.error(err);
@@ -81,10 +67,6 @@ const filteredProducts = useMemo(() => {
           .toLowerCase()
           .includes(query.toLowerCase());
 
-<<<<<<< HEAD
-      const matchesCategory =
-        category === "All" || product.category === category;
-=======
       let matchesCategory = true;
 
       if (category === "Jewelry") {
@@ -100,7 +82,6 @@ const filteredProducts = useMemo(() => {
         matchesCategory =
           product.badge === "New Arrival";
       }
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 
       return matchesQuery && matchesCategory;
     })

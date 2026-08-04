@@ -120,14 +120,9 @@ export function OrdersPage() {
                   {/* Footer row */}
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-stone-100 pt-4 text-sm text-stone-600">
                     <span>
-<<<<<<< HEAD
-                      {itemCount} {itemCount === 1 ? "item" : "items"}
-                    </span>
-=======
                       {itemCount} {itemCount === 1 ? "item" : "items"} , {order.items?.map((item) => item.title).join(", ")}
                     </span>
                     
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
                     <span className="font-semibold text-stone-900">
                       Total ₹{Number(order.totalAmount || 0).toLocaleString("en-IN")}
                     </span>

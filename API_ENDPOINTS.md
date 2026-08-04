@@ -2,11 +2,7 @@
 
 > Auto-generated documentation of all frontend↔backend endpoint connections.
 > **Last updated:** 2026-07-09
-<<<<<<< HEAD
-> **API Gateway:** `https://k5piu4f4k3.execute-api.ap-southeast-1.amazonaws.com`
-=======
 > **API Gateway:** `https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com`
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 > **Auth:** AWS Cognito User Pool `ap-southeast-1_zGjdn5K3U` · Client `cpppgh9rt7kj1t3i5paej5526`
 
 ---
@@ -33,11 +29,7 @@
 
 ## Product Service
 
-<<<<<<< HEAD
 **Lambda Handler:** `backend/product-service/products.js`
-=======
-**Lambda Handler:** `product-service/products.js`
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 **Frontend API Module:** `frontend/src/api/products.js`
 
 | Method | Path | Frontend Function | Used In | Lambda Handler |
@@ -60,11 +52,7 @@
 
 ## Cart Service
 
-<<<<<<< HEAD
 **Lambda Handler:** `backend/cart-service/cart.js`
-=======
-**Lambda Handler:** `cart-service/cart.js`
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 **Frontend API Module:** `frontend/src/api/cart.js`
 **State Manager:** `frontend/src/context/AppContext.jsx`
 
@@ -92,11 +80,7 @@
 
 ## Order Service
 
-<<<<<<< HEAD
 **Lambda Handler:** `backend/order-service/orders.js`
-=======
-**Lambda Handler:** `order-service/orders.js`
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 **Frontend API Module:** `frontend/src/api/orders.js`
 **State Manager:** `frontend/src/context/AppContext.jsx`
 
@@ -129,11 +113,7 @@ CheckoutPage → createPaymentIntent({ orderId }) → POST /payments/intent
 
 ## Payment Service
 
-<<<<<<< HEAD
 **Lambda Handler:** `backend/payment-service/payments.js`
-=======
-**Lambda Handler:** `payment-service/payments.js`
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 **Frontend API Module:** `frontend/src/api/payments.js`
 
 | Method | Path | Frontend Function | Used In | Lambda Route |
@@ -154,11 +134,7 @@ CheckoutPage → createPaymentIntent({ orderId }) → POST /payments/intent
 
 ## Inventory Service
 
-<<<<<<< HEAD
 **Lambda Handler:** `backend/inventory-service/inventory.js`
-=======
-**Lambda Handler:** `inventory-service/inventory.js`
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 **Frontend API Module:** `frontend/src/api/inventory.js`
 
 | Method | Path | Frontend Function | Used In | Lambda Route |

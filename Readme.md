@@ -14,16 +14,9 @@ JewelCart is a production-ready, cloud-native luxury jewelry e-commerce platform
                        │ HTTPS + JWT Bearer Token
                        │ + x-user-id / x-user-role headers
                        ▼
-<<<<<<< HEAD
-┌─────────────────────────────────────────────────┐
-│         AWS API Gateway (Single Entry Point)     │
-│  https://k5piu4f4k3.execute-api.ap-southeast-1  │
-│            .amazonaws.com                        │
-=======
 ┌─────────────────────────────────────────────────          ┐
 │         AWS API Gateway (Single Entry Point)     │
 │https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com│
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 └──┬──────────┬──────────┬───────────┬────────────┘
    │          │          │           │           │
    ▼          ▼          ▼           ▼           ▼
@@ -59,26 +52,6 @@ JewelCart/
 │       ├── amplifyConfig.js     # Cognito configuration
 │       └── main.jsx             # Entry point
 │
-<<<<<<< HEAD
-├── backend/
-│   ├── cart-service/
-│   ├── cart.js                  # AWS Lambda handler
-│   └── shared.js                # DynamoDB client + utilities
-│
-│   ├── product-service/
-│   ├── products.js              # AWS Lambda handler
-│   └── shared.js
-│
-│   ├── order-service/
-│   ├── orders.js                # AWS Lambda handler (+ SQS pub)
-│   └── shared.js
-│
-│   ├── payment-service/
-│   ├── payments.js              # AWS Lambda handler (+ SNS pub)
-│   └── shared.js
-│
-│   └── inventory-service/
-=======
 ├── cart-service/
 │   ├── cart.js                  # AWS Lambda handler
 │   └── shared.js                # DynamoDB client + utilities
@@ -96,7 +69,6 @@ JewelCart/
 │   └── shared.js
 │
 ├── inventory-service/
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 │   ├── inventory.js             # AWS Lambda handler
 │   └── shared.js
 │
@@ -140,11 +112,7 @@ JewelCart/
 
 > See [API_ENDPOINTS.md](./API_ENDPOINTS.md) for the full connection log.
 
-<<<<<<< HEAD
-**Base URL:** `https://k5piu4f4k3.execute-api.ap-southeast-1.amazonaws.com`
-=======
 **Base URL:** `https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com`
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 
 ### Products
 | Method | Path | Auth | Description |
@@ -238,84 +206,14 @@ npm run dev
 ### Lambda services (local testing)
 Each service is a standalone Lambda. To test locally:
 ```bash
-<<<<<<< HEAD
-cd backend/cart-service
-=======
 cd cart-service
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 npm install
 # Use AWS SAM or serverless-offline for local Lambda invocation
 ```
 
 ---
 
-<<<<<<< HEAD
-## � CI/CD Pipeline
-
-This repository now includes production-ready GitHub Actions workflows for continuous integration and deployment.
-
-### CI workflow
-
-The workflow in [.github/workflows/ci.yml](.github/workflows/ci.yml) runs on pushes and pull requests to main, develop, and feature branches.
-
-It includes:
-- Node.js 22 setup and dependency caching
-- Frontend linting, formatting, TypeScript compilation, tests, and coverage enforcement
-- Backend dependency installation for each Lambda service
-- Snyk and Trivy security scanning with SARIF uploads
-- Frontend build and Lambda ZIP packaging
-
-### CD workflow
-
-The workflow in [.github/workflows/cd.yml](.github/workflows/cd.yml) runs after a successful CI run and also supports manual execution.
-
-It performs:
-- AWS authentication with GitHub OIDC
-- Lambda code deployment using aws lambda update-function-code
-- Frontend deployment to S3 and CloudFront invalidation
-- A deployment health verification step
-
-### Required GitHub configuration
-
-Repository secrets:
-- AWS_ROLE_ARN
-- AWS_REGION
-- SNYK_TOKEN
-- CLOUDFRONT_DISTRIBUTION_ID
-
-Repository variables:
-- S3_BUCKET
-
-### Local scripts
-
-The deployment helpers are located in [scripts](scripts):
-- package-lambda.sh
-- deploy-lambda.sh
-- deploy-frontend.sh
-- verify-deployment.sh
-
-Use them locally with:
-```bash
-chmod +x scripts/package-lambda.sh scripts/deploy-lambda.sh scripts/deploy-frontend.sh scripts/verify-deployment.sh
-./scripts/package-lambda.sh
-./scripts/deploy-lambda.sh
-./scripts/deploy-frontend.sh
-./scripts/verify-deployment.sh
-```
-
-### Troubleshooting
-
-- Ensure the OIDC IAM role trust policy allows this repository
-- Verify the AWS Lambda function names match those in the deployment script
-- Confirm the frontend build output exists in frontend/dist before deployment
-- Review GitHub Actions logs for the failing step and the SARIF upload status
-
----
-
-## �📦 Frontend Dependencies
-=======
 ## 📦 Frontend Dependencies
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
 
 | Package | Purpose |
 |---------|---------|
