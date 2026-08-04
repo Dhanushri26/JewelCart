@@ -1,0 +1,73 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  actions: read
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || secrets.AWS_REGION || 'ap-southeast-1' }}
+  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+  CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+  S3_BUCKET: ${{ vars.S3_BUCKET || 'jewelcart-frontend-dhanu' }}
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: github-actions-jewelcart
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-artifacts
+          path: ./artifacts
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id || github.run_id }}
+
+      - name: Deploy Lambda functions
+        run: |
+          chmod +x scripts/deploy-lambda.sh
+          ./scripts/deploy-lambda.sh
+
+      - name: Deploy frontend
+        run: |
+          chmod +x scripts/deploy-frontend.sh
+          ./scripts/deploy-frontend.sh
+
+      - name: Verify deployment
+        run: |
+          chmod +x scripts/verify-deployment.sh
+          ./scripts/verify-deployment.sh
+
+      - name: Show GitHub job summary
+        if: always()
+        run: |
+          echo '## Deployment Summary' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Region: $AWS_REGION' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Frontend bucket: $S3_BUCKET' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Lambda functions: JewelCart-cart, JewelCart-products, JewelCart-inventory, JewelCart-payment, JewelCart-order, jewelcart-notification' >> "$GITHUB_STEP_SUMMARY"
