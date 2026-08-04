@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -6,7 +6,7 @@ const API_TARGET =
   process.env.VITE_API_TARGET ||
   "https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com";
 
-export default defineConfig({
+const config = {
   plugins: [react(), tailwindcss()],
   test: {
     globals: true,
@@ -46,4 +46,6 @@ export default defineConfig({
       },
     },
   },
-});
+} as any;
+
+export default defineConfig(config);
