@@ -22,7 +22,6 @@ import AdminRoute from "../components/AdminRoute";
 export default function AppRoutes({ initialRoute }) {
   return (
     <Routes>
-
       {/* Customer Layout */}
 
       <Route path="/" element={<MainLayout />}>
@@ -60,22 +59,12 @@ export default function AppRoutes({ initialRoute }) {
           </AdminRoute>
         }
       >
-        <Route
-          path="/admin"
-          element={<AdminPage />}
-        />
+        <Route path="/admin" element={<AdminPage />} />
       </Route>
 
-      <Route
-        path="/404"
-        element={<NotFoundPage />}
-      />
+      <Route path="/404" element={<NotFoundPage />} />
 
-      <Route
-        path="*"
-        element={<Navigate to="/404" replace />}
-      />
-
+      <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );
 }

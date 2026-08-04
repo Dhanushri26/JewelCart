@@ -8,7 +8,7 @@ export default function LoginPage({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -18,7 +18,7 @@ export default function LoginPage({ onLogin }) {
       setError("Please enter both email and password.");
       return;
     }
-    
+
     setLoading(true);
     setError("");
     try {
@@ -33,7 +33,10 @@ export default function LoginPage({ onLogin }) {
         return;
       }
 
-      if (result.nextStep?.signInStep === "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED") {
+      if (
+        result.nextStep?.signInStep ===
+        "CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED"
+      ) {
         setStep("NEW_PASSWORD");
         return;
       }
@@ -55,14 +58,14 @@ export default function LoginPage({ onLogin }) {
       setError("Please enter a new password.");
       return;
     }
-    
+
     setLoading(true);
     setError("");
     try {
       const result = await confirmSignIn({
         challengeResponse: newPassword,
       });
-      
+
       // confirmSignIn often just resolves on success, we check nextStep or isSignedIn implicitly
       if (result.isSignedIn || !result.nextStep) {
         await fetchAuthSession();
@@ -90,7 +93,7 @@ export default function LoginPage({ onLogin }) {
         className="relative z-10 w-full max-w-md overflow-hidden rounded-[2.5rem] border border-white/40 bg-white/70 p-10 shadow-[0_8px_40px_rgb(0,0,0,0.04)] backdrop-blur-xl"
       >
         <div className="mb-10 text-center">
-          <motion.div 
+          <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -102,7 +105,7 @@ export default function LoginPage({ onLogin }) {
             {step === "LOGIN" ? "Welcome back" : "Update Password"}
           </h1>
           <p className="mt-3 text-sm text-stone-500">
-            {step === "LOGIN" 
+            {step === "LOGIN"
               ? "Enter your credentials to access your luxury selection."
               : "For your security, please create a new password."}
           </p>
@@ -123,7 +126,10 @@ export default function LoginPage({ onLogin }) {
           )}
         </AnimatePresence>
 
-        <form onSubmit={step === "LOGIN" ? handleLogin : handleNewPassword} className="space-y-5">
+        <form
+          onSubmit={step === "LOGIN" ? handleLogin : handleNewPassword}
+          className="space-y-5"
+        >
           {step === "LOGIN" ? (
             <motion.div
               key="login-fields"
@@ -133,7 +139,10 @@ export default function LoginPage({ onLogin }) {
               className="space-y-5"
             >
               <div className="group relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 transition-colors group-focus-within:text-stone-900" size={18} />
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 transition-colors group-focus-within:text-stone-900"
+                  size={18}
+                />
                 <input
                   type="text" // Using text to allow username or email
                   value={email}
@@ -143,7 +152,10 @@ export default function LoginPage({ onLogin }) {
                 />
               </div>
               <div className="group relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 transition-colors group-focus-within:text-stone-900" size={18} />
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 transition-colors group-focus-within:text-stone-900"
+                  size={18}
+                />
                 <input
                   type="password"
                   value={password}
@@ -161,7 +173,10 @@ export default function LoginPage({ onLogin }) {
               exit={{ opacity: 0, x: -20 }}
             >
               <div className="group relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 transition-colors group-focus-within:text-stone-900" size={18} />
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 transition-colors group-focus-within:text-stone-900"
+                  size={18}
+                />
                 <input
                   type="password"
                   value={newPassword}
@@ -185,7 +200,10 @@ export default function LoginPage({ onLogin }) {
             ) : (
               <>
                 {step === "LOGIN" ? "Sign In" : "Set Password"}
-                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                <ArrowRight
+                  size={16}
+                  className="transition-transform group-hover:translate-x-1"
+                />
               </>
             )}
           </motion.button>

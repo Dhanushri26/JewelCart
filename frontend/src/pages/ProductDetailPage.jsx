@@ -98,7 +98,9 @@ export function ProductDetailPage() {
           {/* Spec grid */}
           <div className="mt-6 grid gap-4 rounded-[1.25rem] bg-stone-50 p-4 text-sm text-stone-600 sm:grid-cols-2">
             <div>
-              <span className="font-semibold text-stone-800">Availability: </span>
+              <span className="font-semibold text-stone-800">
+                Availability:{" "}
+              </span>
               {product.stock > 0 ? "In stock" : "Preorder"}
             </div>
             <div>
@@ -157,8 +159,12 @@ export function ProductDetailPage() {
             <h2 className="text-xl text-stone-800">Customer Reviews</h2>
             <div className="mt-4 flex items-center gap-2 text-amber-500">
               <Star size={18} fill="currentColor" />
-              <span className="font-semibold text-stone-800">{product.rating}</span>
-              <span className="text-stone-600">({product.reviews} reviews)</span>
+              <span className="font-semibold text-stone-800">
+                {product.rating}
+              </span>
+              <span className="text-stone-600">
+                ({product.reviews} reviews)
+              </span>
             </div>
           </div>
         </div>

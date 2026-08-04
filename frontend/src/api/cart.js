@@ -12,8 +12,7 @@ export const getCartItems = () => api.get("/cart");
 export const getCartSummary = () => api.get("/cart/summary");
 
 /** Add a product to the cart (or increase quantity if already present). */
-export const addCartItem = (data) =>
-  api.post("/cart/items", data);
+export const addCartItem = (data) => api.post("/cart/items", data);
 //  data: { productId: string, quantity: number }
 
 /** Update the quantity of an existing cart item. */

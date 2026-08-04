@@ -6,15 +6,26 @@ import { useAppContext } from "../context/AppContext";
 /** Map Lambda orderStatus values to friendly display labels and colors. */
 function statusBadge(status) {
   const map = {
-    PENDING_PAYMENT: { label: "Pending Payment", color: "bg-amber-100 text-amber-700" },
-    PENDING_MANAGEMENT_APPROVAL: { label: "Awaiting Approval", color: "bg-blue-100 text-blue-700" },
+    PENDING_PAYMENT: {
+      label: "Pending Payment",
+      color: "bg-amber-100 text-amber-700",
+    },
+    PENDING_MANAGEMENT_APPROVAL: {
+      label: "Awaiting Approval",
+      color: "bg-blue-100 text-blue-700",
+    },
     CONFIRMED: { label: "Confirmed", color: "bg-sky-100 text-sky-700" },
     PROCESSING: { label: "Processing", color: "bg-indigo-100 text-indigo-700" },
     SHIPPED: { label: "Shipped", color: "bg-purple-100 text-purple-700" },
     DELIVERED: { label: "Delivered", color: "bg-emerald-100 text-emerald-700" },
     CANCELLED: { label: "Cancelled", color: "bg-rose-100 text-rose-700" },
   };
-  return map[status] || { label: status || "Unknown", color: "bg-stone-100 text-stone-600" };
+  return (
+    map[status] || {
+      label: status || "Unknown",
+      color: "bg-stone-100 text-stone-600",
+    }
+  );
 }
 
 function paymentBadge(status) {
@@ -24,7 +35,12 @@ function paymentBadge(status) {
     FAILED: { label: "Payment Failed", color: "bg-rose-100 text-rose-700" },
     REFUNDED: { label: "Refunded", color: "bg-blue-100 text-blue-700" },
   };
-  return map[status] || { label: status || "Unknown", color: "bg-stone-100 text-stone-600" };
+  return (
+    map[status] || {
+      label: status || "Unknown",
+      color: "bg-stone-100 text-stone-600",
+    }
+  );
 }
 
 export function OrdersPage() {
@@ -41,8 +57,12 @@ export function OrdersPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-amber-700">Order History</p>
-            <h1 className="mt-2 text-3xl text-stone-800">Track every precious delivery.</h1>
+            <p className="text-sm uppercase tracking-[0.3em] text-amber-700">
+              Order History
+            </p>
+            <h1 className="mt-2 text-3xl text-stone-800">
+              Track every precious delivery.
+            </h1>
           </div>
           <button
             onClick={loadOrders}
@@ -50,7 +70,10 @@ export function OrdersPage() {
             className="inline-flex items-center gap-2 rounded-full border border-stone-200 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 disabled:opacity-50"
             id="orders-refresh-btn"
           >
-            <RefreshCw size={14} className={ordersLoading ? "animate-spin" : ""} />
+            <RefreshCw
+              size={14}
+              className={ordersLoading ? "animate-spin" : ""}
+            />
             Refresh
           </button>
         </div>
@@ -59,7 +82,10 @@ export function OrdersPage() {
         {ordersLoading && orders.length === 0 && (
           <div className="mt-8 space-y-4">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="animate-pulse rounded-[1.25rem] border border-stone-200 p-6">
+              <div
+                key={n}
+                className="animate-pulse rounded-[1.25rem] border border-stone-200 p-6"
+              >
                 <div className="h-4 w-32 rounded-full bg-stone-200" />
                 <div className="mt-3 h-5 w-48 rounded-full bg-stone-100" />
                 <div className="mt-4 flex gap-2">
@@ -84,7 +110,9 @@ export function OrdersPage() {
                     year: "numeric",
                   })
                 : "—";
-              const itemCount = Array.isArray(order.items) ? order.items.length : "—";
+              const itemCount = Array.isArray(order.items)
+                ? order.items.length
+                : "—";
 
               return (
                 <div
@@ -102,16 +130,22 @@ export function OrdersPage() {
                         <p className="text-sm font-semibold text-stone-500">
                           #{order.orderId?.substring(0, 8).toUpperCase()}
                         </p>
-                        <h2 className="mt-0.5 text-lg text-stone-800">{dateStr}</h2>
+                        <h2 className="mt-0.5 text-lg text-stone-800">
+                          {dateStr}
+                        </h2>
                       </div>
                     </div>
 
                     {/* Status badges */}
                     <div className="flex flex-wrap gap-2 text-xs font-medium">
-                      <span className={`rounded-full px-3 py-1 ${pStatus.color}`}>
+                      <span
+                        className={`rounded-full px-3 py-1 ${pStatus.color}`}
+                      >
                         {pStatus.label}
                       </span>
-                      <span className={`rounded-full px-3 py-1 ${oStatus.color}`}>
+                      <span
+                        className={`rounded-full px-3 py-1 ${oStatus.color}`}
+                      >
                         {oStatus.label}
                       </span>
                     </div>
@@ -120,11 +154,13 @@ export function OrdersPage() {
                   {/* Footer row */}
                   <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-stone-100 pt-4 text-sm text-stone-600">
                     <span>
-                      {itemCount} {itemCount === 1 ? "item" : "items"} , {order.items?.map((item) => item.title).join(", ")}
+                      {itemCount} {itemCount === 1 ? "item" : "items"} ,{" "}
+                      {order.items?.map((item) => item.title).join(", ")}
                     </span>
-                    
+
                     <span className="font-semibold text-stone-900">
-                      Total ₹{Number(order.totalAmount || 0).toLocaleString("en-IN")}
+                      Total ₹
+                      {Number(order.totalAmount || 0).toLocaleString("en-IN")}
                     </span>
                   </div>
                 </div>

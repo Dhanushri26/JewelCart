@@ -14,7 +14,7 @@ import { getOrders } from "../api/orders";
 import { getInventory } from "../api/inventory";
 import { getPayments } from "../api/payments";
 import { useAppContext } from "../context/AppContext";
-import DashboardPanel from "../components/admin/DashboardPanel"
+import DashboardPanel from "../components/admin/DashboardPanel";
 import ProductsPanel from "../components/admin/ProductsPanel";
 import InventoryPanel from "../components/admin/InventoryPanel";
 import OrdersPanel from "../components/admin/OrdersPanel";
@@ -46,7 +46,7 @@ const NAV_ICONS = {
 };
 
 export function AdminPage() {
-const { activeNav } = useOutletContext();
+  const { activeNav } = useOutletContext();
 
   const [orders, setOrders] = useState([]);
   const [inventory, setInventory] = useState([]);
@@ -57,11 +57,12 @@ const { activeNav } = useOutletContext();
     async function loadDashboard() {
       setLoading(true);
       try {
-        const [ordersData, inventoryData, paymentsData] = await Promise.allSettled([
-          getOrders(),
-          getInventory(),
-          getPayments(),
-        ]);
+        const [ordersData, inventoryData, paymentsData] =
+          await Promise.allSettled([
+            getOrders(),
+            getInventory(),
+            getPayments(),
+          ]);
 
         if (ordersData.status === "fulfilled") {
           setOrders(ordersData.value.orders || []);
@@ -86,7 +87,9 @@ const { activeNav } = useOutletContext();
     .filter((o) => o.paymentStatus === "PAID")
     .reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
 
-  const paidPaymentCount = payments.filter((p) => p.paymentStatus === "PAID").length;
+  const paidPaymentCount = payments.filter(
+    (p) => p.paymentStatus === "PAID",
+  ).length;
   const paymentSuccessRate =
     payments.length > 0
       ? Math.round((paidPaymentCount / payments.length) * 100)
@@ -120,29 +123,30 @@ const { activeNav } = useOutletContext();
 
   const recentOrders = orders.slice(0, 5);
   const lowStockItems = inventory
-    .filter((i) => Number(i.availableQuantity || 0) <= Number(i.reorderThreshold || 2))
+    .filter(
+      (i) =>
+        Number(i.availableQuantity || 0) <= Number(i.reorderThreshold || 2),
+    )
     .slice(0, 5);
 
   return (
+    <>
+      {activeNav === "Dashboard" && (
+        <DashboardPanel
+          loading={loading}
+          stats={stats}
+          recentOrders={recentOrders}
+          lowStockItems={lowStockItems}
+        />
+      )}
 
-<>
-    {activeNav === "Dashboard" && (
-            <DashboardPanel
-                  loading={loading}
-                  stats={stats}
-                  recentOrders={recentOrders}
-                  lowStockItems={lowStockItems}
-
-            />
-          )}
-
-          {activeNav === "Products" && <ProductsPanel />}
-          {activeNav === "Inventory" && <InventoryPanel />}
-          {activeNav === "Orders" && <OrdersPanel />}
-          {activeNav === "Payments" && <PaymentsPanel />}
-          {activeNav === "Customers" && <CustomersPanel />}
-          {activeNav === "Analytics" && <AnalyticsPanel />}
-          {activeNav === "Settings" && <SettingsPanel />}
-</>
+      {activeNav === "Products" && <ProductsPanel />}
+      {activeNav === "Inventory" && <InventoryPanel />}
+      {activeNav === "Orders" && <OrdersPanel />}
+      {activeNav === "Payments" && <PaymentsPanel />}
+      {activeNav === "Customers" && <CustomersPanel />}
+      {activeNav === "Analytics" && <AnalyticsPanel />}
+      {activeNav === "Settings" && <SettingsPanel />}
+    </>
   );
 }

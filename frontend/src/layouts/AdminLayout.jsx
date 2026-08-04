@@ -11,7 +11,6 @@ export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-stone-950 text-stone-100">
       <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 lg:px-8">
-
         <AdminSidebar
           user={user}
           activeNav={activeNav}
@@ -26,7 +25,6 @@ export default function AdminLayout() {
             }}
           />
         </main>
-
       </div>
     </div>
   );

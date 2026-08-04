@@ -29,11 +29,12 @@ export function ProfilePage() {
     }
   };
 
-  const roleBadgeColor = {
-    Admin: "bg-rose-100 text-rose-700",
-    Business: "bg-blue-100 text-blue-700",
-    Customer: "bg-emerald-100 text-emerald-700",
-  }[user?.role] ?? "bg-stone-100 text-stone-600";
+  const roleBadgeColor =
+    {
+      Admin: "bg-rose-100 text-rose-700",
+      Business: "bg-blue-100 text-blue-700",
+      Customer: "bg-emerald-100 text-emerald-700",
+    }[user?.role] ?? "bg-stone-100 text-stone-600";
 
   const stats = [
     {
@@ -84,7 +85,9 @@ export function ProfilePage() {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-3 rounded-full border border-stone-200 bg-stone-50 px-4 py-3">
               <UserRound className="text-stone-600" />
-              <span className={`rounded-full px-3 py-1 text-xs font-semibold ${roleBadgeColor}`}>
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${roleBadgeColor}`}
+              >
                 {user?.role || "Customer"}
               </span>
             </div>

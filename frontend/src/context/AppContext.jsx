@@ -46,7 +46,7 @@ export function AppProvider({ children }) {
   // ── Auth / User ──
   const [user, setUser] = useState(null);
   // user = { userId, email, role, name }
-const [authLoading, setAuthLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(true);
   // ── Cart ──
   const [cart, setCart] = useState([]);
   const [cartLoading, setCartLoading] = useState(false);
@@ -109,50 +109,59 @@ const [authLoading, setAuthLoading] = useState(true);
   }, [loadCart]);
 
   /** Add product to cart then reload from backend. */
-  const addToCart = useCallback(async (product) => {
-    try {
-      // Lambda accepts productId (string uuid from product-service)
-      const productId = product.productId ?? product.id;
-      await addCartItem({ productId, quantity: 1 });
-      await loadCart();
-      showToast("Added to cart!", "success");
-    } catch (err) {
-      console.error("[AppContext] addToCart error:", err);
-      showToast(
-        err.response?.data?.message || "Could not add item to cart.",
-        "error"
-      );
-    }
-  }, [loadCart]);
+  const addToCart = useCallback(
+    async (product) => {
+      try {
+        // Lambda accepts productId (string uuid from product-service)
+        const productId = product.productId ?? product.id;
+        await addCartItem({ productId, quantity: 1 });
+        await loadCart();
+        showToast("Added to cart!", "success");
+      } catch (err) {
+        console.error("[AppContext] addToCart error:", err);
+        showToast(
+          err.response?.data?.message || "Could not add item to cart.",
+          "error",
+        );
+      }
+    },
+    [loadCart],
+  );
 
   /** Update cart item quantity on backend then reload. */
-  const updateQuantity = useCallback(async (productId, quantity) => {
-    if (quantity <= 0) return removeFromCart(productId);
-    try {
-      await updateCartItem(productId, { quantity });
-      await loadCart();
-    } catch (err) {
-      console.error("[AppContext] updateQuantity error:", err);
-      showToast(
-        err.response?.data?.message || "Could not update quantity.",
-        "error"
-      );
-    }
-  }, [loadCart]);
+  const updateQuantity = useCallback(
+    async (productId, quantity) => {
+      if (quantity <= 0) return removeFromCart(productId);
+      try {
+        await updateCartItem(productId, { quantity });
+        await loadCart();
+      } catch (err) {
+        console.error("[AppContext] updateQuantity error:", err);
+        showToast(
+          err.response?.data?.message || "Could not update quantity.",
+          "error",
+        );
+      }
+    },
+    [loadCart],
+  );
 
   /** Remove a cart item from backend then reload. */
-  const removeFromCart = useCallback(async (productId) => {
-    try {
-      await deleteCartItem(productId);
-      await loadCart();
-    } catch (err) {
-      console.error("[AppContext] removeFromCart error:", err);
-      showToast(
-        err.response?.data?.message || "Could not remove item.",
-        "error"
-      );
-    }
-  }, [loadCart]);
+  const removeFromCart = useCallback(
+    async (productId) => {
+      try {
+        await deleteCartItem(productId);
+        await loadCart();
+      } catch (err) {
+        console.error("[AppContext] removeFromCart error:", err);
+        showToast(
+          err.response?.data?.message || "Could not remove item.",
+          "error",
+        );
+      }
+    },
+    [loadCart],
+  );
 
   /** Clear all cart items. */
   const clearCartItems = useCallback(async () => {
@@ -180,13 +189,16 @@ const [authLoading, setAuthLoading] = useState(true);
     }
   }, []);
 
-  const createOrder = useCallback(async (notes = "") => {
-    const data = await apiCreateOrder({ notes });
-    // Clear cart from state after successful order
-    setCart([]);
-    await loadOrders();
-    return data; // { order: { orderId, ... } }
-  }, [loadOrders]);
+  const createOrder = useCallback(
+    async (notes = "") => {
+      const data = await apiCreateOrder({ notes });
+      // Clear cart from state after successful order
+      setCart([]);
+      await loadOrders();
+      return data; // { order: { orderId, ... } }
+    },
+    [loadOrders],
+  );
 
   // ──────────────────────────────────────────────
   // Wishlist (local – no backend yet)
@@ -194,15 +206,18 @@ const [authLoading, setAuthLoading] = useState(true);
 
   const addToWishlist = useCallback((product) => {
     setWishlist((prev) =>
-      prev.some((item) => item.id === product.id || item.productId === product.productId)
+      prev.some(
+        (item) =>
+          item.id === product.id || item.productId === product.productId,
+      )
         ? prev
-        : [...prev, product]
+        : [...prev, product],
     );
   }, []);
 
   const removeFromWishlist = useCallback((id) => {
     setWishlist((prev) =>
-      prev.filter((item) => item.id !== id && item.productId !== id)
+      prev.filter((item) => item.id !== id && item.productId !== id),
     );
   }, []);
 
@@ -260,7 +275,7 @@ const [authLoading, setAuthLoading] = useState(true);
       createOrder,
       addToWishlist,
       removeFromWishlist,
-    ]
+    ],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -268,6 +283,7 @@ const [authLoading, setAuthLoading] = useState(true);
 
 export function useAppContext() {
   const context = useContext(AppContext);
-  if (!context) throw new Error("useAppContext must be used within AppProvider");
+  if (!context)
+    throw new Error("useAppContext must be used within AppProvider");
   return context;
 }

@@ -78,7 +78,8 @@ api.interceptors.request.use(
         // x-business-id: if user belongs to a Business group, use sub as
         // businessId placeholder until custom attributes are added.
         if (role === "Business") {
-          config.headers["x-business-id"] = payload["custom:businessId"] || userId;
+          config.headers["x-business-id"] =
+            payload["custom:businessId"] || userId;
         }
       }
     } catch (err) {
@@ -88,7 +89,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // ──────────────────────────────────────────────────────────────
@@ -105,7 +106,7 @@ api.interceptors.response.use(
 
     // Propagate so callers can handle individually
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

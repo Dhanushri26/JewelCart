@@ -30,11 +30,7 @@ const NAV_ICONS = {
   Settings: Settings,
 };
 
-export default function AdminSidebar({
-  user,
-  activeNav,
-  setActiveNav,
-}) {
+export default function AdminSidebar({ user, activeNav, setActiveNav }) {
   return (
     <aside className="w-full rounded-[1.5rem] border border-stone-800 bg-stone-900 p-6 lg:w-72">
       <h1 className="text-2xl font-semibold tracking-[0.3em]">
@@ -43,13 +39,9 @@ export default function AdminSidebar({
 
       {user && (
         <div className="mt-3 border-b border-stone-800 pb-4">
-          <p className="text-sm font-medium text-white">
-            {user.name}
-          </p>
+          <p className="text-sm font-medium text-white">{user.name}</p>
 
-          <p className="mt-1 text-xs text-stone-500">
-            {user.email}
-          </p>
+          <p className="mt-1 text-xs text-stone-500">{user.email}</p>
 
           <span className="mt-3 inline-flex rounded-full bg-amber-600/20 px-3 py-1 text-xs font-medium text-amber-400">
             {user.role}

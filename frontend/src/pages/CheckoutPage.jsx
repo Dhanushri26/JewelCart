@@ -28,8 +28,10 @@ export function CheckoutPage() {
 
   // ── Cart totals ──
   const subtotal = cart.reduce(
-    (sum, item) => sum + Number(item.unitPrice || item.price || 0) * Number(item.quantity || 1),
-    0
+    (sum, item) =>
+      sum +
+      Number(item.unitPrice || item.price || 0) * Number(item.quantity || 1),
+    0,
   );
   const tax = subtotal * 0.08;
   const shippingFee = subtotal > 15000 ? 0 : 650;
@@ -48,11 +50,11 @@ export function CheckoutPage() {
     setLoading(true);
     setProcessingPayment(true);
     setError("");
-    
+
     try {
       // 1) Create order from current cart (Lambda reads cart from DynamoDB)
       const orderData = await createOrder(
-        `Ship to: ${shipping.fullName}, ${shipping.address}, ${shipping.city} - ${shipping.pincode}`
+        `Ship to: ${shipping.fullName}, ${shipping.address}, ${shipping.city} - ${shipping.pincode}`,
       );
       const order = orderData.order;
 
@@ -66,7 +68,7 @@ export function CheckoutPage() {
       // 3) Mark payment as PAID in backend
       await updatePayment(paymentId, {
         paymentStatus: "PAID",
-        transactionReference: `INTERNAL-TXN-${Date.now()}`
+        transactionReference: `INTERNAL-TXN-${Date.now()}`,
       });
 
       // Manually update the local order obj so the UI reflects the cascade
@@ -78,7 +80,7 @@ export function CheckoutPage() {
       console.error("[Checkout] Order failed:", err);
       setError(
         err.response?.data?.message ||
-          "Something went wrong during payment processing. Please try again."
+          "Something went wrong during payment processing. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -89,7 +91,7 @@ export function CheckoutPage() {
   // ── Confirmation screen ──
   if (step === 5 && confirmedOrder) {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="mx-auto max-w-2xl px-4 py-16 lg:px-8 text-center"
@@ -100,16 +102,25 @@ export function CheckoutPage() {
             animate={{ scale: 1 }}
             transition={{ type: "spring", bounce: 0.5 }}
           >
-            <CheckCircle2 className="mx-auto text-emerald-500" size={64} strokeWidth={1.5} />
+            <CheckCircle2
+              className="mx-auto text-emerald-500"
+              size={64}
+              strokeWidth={1.5}
+            />
           </motion.div>
-          <h1 className="mt-6 text-3xl font-medium tracking-tight text-stone-900">Order Confirmed!</h1>
+          <h1 className="mt-6 text-3xl font-medium tracking-tight text-stone-900">
+            Order Confirmed!
+          </h1>
           <p className="mt-3 text-stone-600">
-            Thank you for your purchase. Your exquisite pieces will be on their way soon.
+            Thank you for your purchase. Your exquisite pieces will be on their
+            way soon.
           </p>
           <div className="mt-8 rounded-[1.5rem] bg-stone-50 p-6 text-left text-sm text-stone-700 border border-stone-100">
             <div className="flex justify-between border-b border-stone-200 pb-3">
               <span className="font-semibold text-stone-900">Order ID</span>
-              <span className="font-mono">#{confirmedOrder.orderId?.substring(0, 8).toUpperCase()}</span>
+              <span className="font-mono">
+                #{confirmedOrder.orderId?.substring(0, 8).toUpperCase()}
+              </span>
             </div>
             <div className="flex justify-between border-b border-stone-200 py-3">
               <span className="font-semibold text-stone-900">Status</span>
@@ -120,7 +131,10 @@ export function CheckoutPage() {
             <div className="flex justify-between pt-3">
               <span className="font-semibold text-stone-900">Total Paid</span>
               <span className="font-medium text-stone-900">
-                ₹{Number(confirmedOrder.totalAmount || total).toLocaleString("en-IN")}
+                ₹
+                {Number(confirmedOrder.totalAmount || total).toLocaleString(
+                  "en-IN",
+                )}
               </span>
             </div>
           </div>
@@ -148,11 +162,10 @@ export function CheckoutPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
       <div className="relative rounded-[2.5rem] border border-stone-200 bg-white p-8 lg:p-10 shadow-[0_8px_40px_rgb(0,0,0,0.04)] overflow-hidden">
-        
         {/* Payment Processing Overlay */}
         <AnimatePresence>
           {processingPayment && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -164,17 +177,24 @@ export function CheckoutPage() {
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                   className="mb-6 h-16 w-16 rounded-full border-[3px] border-stone-200 border-t-amber-700"
                 />
-                <h3 className="text-2xl font-medium text-stone-900">Processing Payment</h3>
+                <h3 className="text-2xl font-medium text-stone-900">
+                  Processing Payment
+                </h3>
                 <p className="mt-2 text-stone-500 flex items-center gap-2 justify-center">
-                  <LockKeyhole size={14} /> Securely communicating with gateway...
+                  <LockKeyhole size={14} /> Securely communicating with
+                  gateway...
                 </p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <p className="text-sm font-medium uppercase tracking-[0.25em] text-amber-700">Secure Checkout</p>
-        <h1 className="mt-2 text-3xl font-medium tracking-tight text-stone-900">Complete your acquisition</h1>
+        <p className="text-sm font-medium uppercase tracking-[0.25em] text-amber-700">
+          Secure Checkout
+        </p>
+        <h1 className="mt-2 text-3xl font-medium tracking-tight text-stone-900">
+          Complete your acquisition
+        </h1>
 
         {/* Step indicator */}
         <div className="mt-10 flex flex-wrap items-center gap-3 text-sm font-medium">
@@ -188,15 +208,17 @@ export function CheckoutPage() {
                     isActive
                       ? "bg-stone-900 text-white shadow-md"
                       : isCompleted
-                      ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
-                      : "bg-stone-50 text-stone-400"
+                        ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                        : "bg-stone-50 text-stone-400"
                   }`}
                 >
                   {isCompleted && <CheckCircle2 size={14} className="mr-1.5" />}
                   {label}
                 </div>
                 {index < STEPS.length - 1 && (
-                  <div className={`h-[1px] w-4 ${isCompleted ? 'bg-emerald-200' : 'bg-stone-200'}`} />
+                  <div
+                    className={`h-[1px] w-4 ${isCompleted ? "bg-emerald-200" : "bg-stone-200"}`}
+                  />
                 )}
               </div>
             );
@@ -230,7 +252,9 @@ export function CheckoutPage() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 10 }}
                 >
-                  <h2 className="text-xl font-medium text-stone-900">Shipping details</h2>
+                  <h2 className="text-xl font-medium text-stone-900">
+                    Shipping details
+                  </h2>
                   <div className="mt-6 grid gap-5 md:grid-cols-2">
                     <input
                       id="shipping-name"
@@ -284,15 +308,30 @@ export function CheckoutPage() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 10 }}
                 >
-                  <h2 className="text-xl font-medium text-stone-900">Billing details</h2>
+                  <h2 className="text-xl font-medium text-stone-900">
+                    Billing details
+                  </h2>
                   <div className="mt-6 space-y-4">
                     <label className="flex items-center gap-4 rounded-[1.5rem] border border-stone-200 bg-white p-5 cursor-pointer transition-colors hover:bg-stone-50">
-                      <input type="radio" name="billing" defaultChecked className="h-5 w-5 accent-stone-900" />
-                      <span className="text-sm font-medium text-stone-700">Same as shipping address</span>
+                      <input
+                        type="radio"
+                        name="billing"
+                        defaultChecked
+                        className="h-5 w-5 accent-stone-900"
+                      />
+                      <span className="text-sm font-medium text-stone-700">
+                        Same as shipping address
+                      </span>
                     </label>
                     <label className="flex items-center gap-4 rounded-[1.5rem] border border-stone-200 bg-white p-5 cursor-pointer transition-colors hover:bg-stone-50">
-                      <input type="radio" name="billing" className="h-5 w-5 accent-stone-900" />
-                      <span className="text-sm font-medium text-stone-700">Use a different billing address</span>
+                      <input
+                        type="radio"
+                        name="billing"
+                        className="h-5 w-5 accent-stone-900"
+                      />
+                      <span className="text-sm font-medium text-stone-700">
+                        Use a different billing address
+                      </span>
                     </label>
                   </div>
                 </motion.div>
@@ -306,7 +345,9 @@ export function CheckoutPage() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 10 }}
                 >
-                  <h2 className="text-xl font-medium text-stone-900">Review your order</h2>
+                  <h2 className="text-xl font-medium text-stone-900">
+                    Review your order
+                  </h2>
                   <div className="mt-6 space-y-4">
                     {cart.length === 0 ? (
                       <p className="text-stone-500">Your cart is empty.</p>
@@ -320,10 +361,16 @@ export function CheckoutPage() {
                             <p className="font-medium text-stone-900">
                               {item.productTitle || item.name || "Product"}
                             </p>
-                            <p className="mt-1 text-sm text-stone-500">Qty: {item.quantity}</p>
+                            <p className="mt-1 text-sm text-stone-500">
+                              Qty: {item.quantity}
+                            </p>
                           </div>
                           <p className="font-semibold text-stone-900">
-                            ₹{(Number(item.unitPrice || item.price || 0) * item.quantity).toLocaleString("en-IN")}
+                            ₹
+                            {(
+                              Number(item.unitPrice || item.price || 0) *
+                              item.quantity
+                            ).toLocaleString("en-IN")}
                           </p>
                         </div>
                       ))
@@ -340,7 +387,9 @@ export function CheckoutPage() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 10 }}
                 >
-                  <h2 className="text-xl font-medium text-stone-900">Payment</h2>
+                  <h2 className="text-xl font-medium text-stone-900">
+                    Payment
+                  </h2>
                   <div className="mt-4 flex items-center gap-2 rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
                     <ShieldCheck size={16} className="text-amber-600" />
                     Secure internal payment gateway active.
@@ -348,21 +397,38 @@ export function CheckoutPage() {
                   <div className="mt-6 space-y-4">
                     <label className="flex items-center gap-4 rounded-[1.5rem] border border-stone-200 bg-white p-5 cursor-pointer hover:bg-stone-50 transition-colors relative overflow-hidden group">
                       <div className="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <input type="radio" name="payment" defaultChecked className="h-5 w-5 accent-stone-900" />
+                      <input
+                        type="radio"
+                        name="payment"
+                        defaultChecked
+                        className="h-5 w-5 accent-stone-900"
+                      />
                       <div className="flex-1">
-                        <span className="block text-sm font-medium text-stone-900">Credit or Debit Card</span>
-                        <span className="block text-xs text-stone-500 mt-1">Processed securely</span>
+                        <span className="block text-sm font-medium text-stone-900">
+                          Credit or Debit Card
+                        </span>
+                        <span className="block text-xs text-stone-500 mt-1">
+                          Processed securely
+                        </span>
                       </div>
                     </label>
                     <label className="flex items-center gap-4 rounded-[1.5rem] border border-stone-200 bg-white p-5 cursor-pointer hover:bg-stone-50 transition-colors">
-                      <input type="radio" name="payment" className="h-5 w-5 accent-stone-900" />
+                      <input
+                        type="radio"
+                        name="payment"
+                        className="h-5 w-5 accent-stone-900"
+                      />
                       <div className="flex-1">
-                        <span className="block text-sm font-medium text-stone-900">Bank Transfer</span>
-                        <span className="block text-xs text-stone-500 mt-1">NEFT / RTGS</span>
+                        <span className="block text-sm font-medium text-stone-900">
+                          Bank Transfer
+                        </span>
+                        <span className="block text-xs text-stone-500 mt-1">
+                          NEFT / RTGS
+                        </span>
                       </div>
                     </label>
                   </div>
-                  
+
                   <button
                     onClick={handlePlaceOrder}
                     disabled={loading || cart.length === 0}
@@ -372,9 +438,7 @@ export function CheckoutPage() {
                     {loading ? (
                       <Loader2 size={20} className="animate-spin" />
                     ) : (
-                      <>
-                        Confirm & Pay ₹{total.toLocaleString("en-IN")}
-                      </>
+                      <>Confirm & Pay ₹{total.toLocaleString("en-IN")}</>
                     )}
                   </button>
                 </motion.div>
@@ -387,7 +451,7 @@ export function CheckoutPage() {
                 <button
                   onClick={() => setStep((p) => Math.max(1, p - 1))}
                   className={`rounded-2xl border border-stone-200 px-6 py-3.5 text-sm font-medium text-stone-700 transition-colors hover:bg-stone-50 ${
-                    step === 1 ? 'invisible' : ''
+                    step === 1 ? "invisible" : ""
                   }`}
                   id="checkout-back-btn"
                 >
@@ -406,7 +470,9 @@ export function CheckoutPage() {
 
           {/* Right — Order Preview */}
           <div className="rounded-[2rem] border border-stone-200 p-8 bg-white h-fit shadow-sm">
-            <h2 className="text-xl font-medium text-stone-900">Order Preview</h2>
+            <h2 className="text-xl font-medium text-stone-900">
+              Order Preview
+            </h2>
             <div className="mt-8 space-y-4 text-sm">
               {cart.length === 0 ? (
                 <p className="text-stone-400">No items in cart.</p>
@@ -420,35 +486,46 @@ export function CheckoutPage() {
                       <span className="font-medium text-stone-800 truncate pr-2 max-w-[200px]">
                         {item.productTitle || item.name || "Product"}
                       </span>
-                      <span className="text-stone-400 text-xs mt-0.5">Qty: {item.quantity}</span>
+                      <span className="text-stone-400 text-xs mt-0.5">
+                        Qty: {item.quantity}
+                      </span>
                     </div>
                     <span className="font-medium text-stone-900">
                       ₹
                       {(
-                        Number(item.unitPrice || item.price || 0) * item.quantity
+                        Number(item.unitPrice || item.price || 0) *
+                        item.quantity
                       ).toLocaleString("en-IN")}
                     </span>
                   </div>
                 ))
               )}
-              
+
               <div className="mt-8 pt-6 border-t border-stone-100 space-y-3 text-stone-600">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-medium text-stone-800">₹{subtotal.toLocaleString("en-IN")}</span>
+                  <span className="font-medium text-stone-800">
+                    ₹{subtotal.toLocaleString("en-IN")}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping</span>
-                  <span className="font-medium text-stone-800">{shippingFee === 0 ? "Complimentary" : `₹${shippingFee}`}</span>
+                  <span className="font-medium text-stone-800">
+                    {shippingFee === 0 ? "Complimentary" : `₹${shippingFee}`}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Estimated Tax (8%)</span>
-                  <span className="font-medium text-stone-800">₹{tax.toFixed(0)}</span>
+                  <span className="font-medium text-stone-800">
+                    ₹{tax.toFixed(0)}
+                  </span>
                 </div>
               </div>
-              
+
               <div className="mt-6 flex items-center justify-between rounded-2xl bg-stone-50 p-5">
-                <span className="text-base font-semibold text-stone-900">Grand Total</span>
+                <span className="text-base font-semibold text-stone-900">
+                  Grand Total
+                </span>
                 <span className="text-xl font-semibold text-stone-900">
                   ₹{total.toLocaleString("en-IN")}
                 </span>

@@ -27,8 +27,8 @@ export const getInventoryByProduct = async (productId) => {
  * @param {object} data - { productId, availableQuantity, reservedQuantity, damagedQuantity, reorderThreshold, inventoryStatus }
  */
 export const createInventory = async (data) => {
-    const response = await api.post("/inventory", data);
-    return response.data;
+  const response = await api.post("/inventory", data);
+  return response.data;
 };
 /**
  * Reserve stock for a product (admin/business only).
@@ -41,10 +41,7 @@ export const reserveInventory = async (data) => {
 };
 
 export const updateInventory = async (productId, data) => {
-  const response = await api.put(
-    `/inventory/${productId}`,
-    data
-  );
+  const response = await api.put(`/inventory/${productId}`, data);
 
   return response.data;
 };

@@ -83,7 +83,7 @@ export const verifyPurchaseOrder = async (data) => {
 
 /**
  * Update payment metadata and status.
- * @param {string} paymentId 
+ * @param {string} paymentId
  * @param {object} data - e.g. { paymentStatus: 'PAID' }
  */
 export const updatePayment = async (paymentId, data) => {
