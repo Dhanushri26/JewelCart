@@ -21,10 +21,7 @@ export function AboutPage() {
     </div>
   )
 }
-<<<<<<< HEAD
 
 
 
 
-=======
->>>>>>> a1085ac3f907c76d2adb17501784107a85c1a905
