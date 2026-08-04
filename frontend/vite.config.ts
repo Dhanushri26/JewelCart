@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import type { IncomingMessage, ServerResponse } from "node:http";
 
 const API_TARGET =
   process.env.VITE_API_TARGET ||
@@ -21,8 +22,17 @@ const config = {
         changeOrigin: true,
         secure: true,
         rewrite: (path: string) => path.replace(/^\/api/, ""),
-        configure: (proxy: any) => {
-          proxy.on("proxyRes", (proxyRes: any, _req: any, res: any) => {
+        configure: (proxy: {
+          on: (
+            event: string,
+            listener: (
+              proxyRes: { statusCode?: number },
+              _req: IncomingMessage,
+              res: ServerResponse,
+            ) => void,
+          ) => void;
+        }) => {
+          proxy.on("proxyRes", (proxyRes, _req, res) => {
             res.setHeader(
               "Access-Control-Allow-Origin",
               "http://localhost:5173",
@@ -46,6 +56,6 @@ const config = {
       },
     },
   },
-} as any;
+};
 
-export default defineConfig(config);
+export default defineConfig(config as Parameters<typeof defineConfig>[0]);

@@ -43,11 +43,16 @@ jobs:
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: deployment-artifacts
           path: ./artifacts
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id || github.run_id }}
+
+      - name: Ensure artifact directories exist
+        run: |
+          mkdir -p ./artifacts/frontend/dist ./artifacts/lambda-packages ./artifacts/coverage-reports ./artifacts/security-reports
 
       - name: Deploy Lambda functions
         run: |
