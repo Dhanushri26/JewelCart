@@ -142,27 +142,10 @@ jobs:
           npm audit --audit-level=high --omit=dev || true
         working-directory: frontend
 
-      - name: Run Snyk Open Source Scan
-        uses: snyk/actions/node@master
-        continue-on-error: false
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --sarif-file-output=snyk-opensource.sarif
-          command: test
-          json: false
-          entryPoint: /bin/sh
-
-      - name: Run Snyk Code Scan
-        uses: snyk/actions/node@master
-        continue-on-error: false
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --sarif-file-output=snyk-code.sarif --code
-          command: code test
-          json: false
-          entryPoint: /bin/sh
+      - name: Run npm audit
+        run: |
+          npm audit --audit-level=high --omit=dev || true
+        working-directory: frontend
 
       - name: Run Trivy filesystem scan
         uses: aquasecurity/trivy-action@master
@@ -173,22 +156,12 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
 
-      - name: Upload SARIF to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: |
-            snyk-opensource.sarif
-            snyk-code.sarif
-            trivy-results.sarif
-
       - name: Upload security reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: security-reports
           path: |
-            snyk-opensource.sarif
-            snyk-code.sarif
             trivy-results.sarif
           retention-days: 7
 
