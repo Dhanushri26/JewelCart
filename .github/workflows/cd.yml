@@ -70,6 +70,19 @@ jobs:
           chmod +x scripts/deploy-lambda.sh
           ./scripts/deploy-lambda.sh
 
+      - name: Debug Workspace
+        run: |
+          echo "Current directory:"
+          pwd
+
+          echo ""
+          echo "Repository contents:"
+          ls -R
+
+          echo ""
+          echo "Artifacts:"
+          ls -R artifacts || true
+
       - name: Deploy Frontend to S3
         run: |
           chmod +x scripts/deploy-frontend.sh
