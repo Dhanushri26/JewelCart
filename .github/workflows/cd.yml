@@ -26,7 +26,6 @@ jobs:
     runs-on: self-hosted
 
     env:
-      AWS_PROFILE: Academy
       AWS_REGION: ap-southeast-1
       S3_BUCKET: jewelcart-frontend-dhanu
       CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
