@@ -79,10 +79,7 @@ export default function LoginPage({ onLogin }) {
         : layoutProps.tabs;
 
   return (
-    <AuthLayout
-      title={currentLayout.title}
-      subtitle={currentLayout.subtitle}
-    >
+    <AuthLayout title={currentLayout.title} subtitle={currentLayout.subtitle}>
       {successMessage && (
         <div className="mb-6 rounded-2xl border border-emerald-100 bg-emerald-50/80 px-4 py-3 text-sm text-emerald-700 backdrop-blur-sm">
           {successMessage}

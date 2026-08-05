@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { signUp } from "aws-amplify/auth";
 import { motion } from "framer-motion";
-import {
-  Loader2,
-  ArrowRight,
-  Lock,
-  Mail,
-  User,
-} from "lucide-react";
+import { Loader2, ArrowRight, Lock, Mail, User } from "lucide-react";
 import { getCognitoErrorMessage } from "../../utils/cognitoErrors";
 import {
   getPasswordPolicyErrors,

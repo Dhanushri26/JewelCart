@@ -156,8 +156,8 @@ export default function ForgotPasswordForm({ onBack, onSuccess }) {
     <div>
       <p className="mb-6 text-center text-sm text-stone-500">
         Enter the verification code sent to{" "}
-        <span className="font-medium text-stone-800">{email}</span> and choose
-        a new password.
+        <span className="font-medium text-stone-800">{email}</span> and choose a
+        new password.
       </p>
 
       <form onSubmit={handleConfirmReset} className="space-y-4">
