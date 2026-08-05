@@ -60,10 +60,30 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id || github.run_id }}
 
-      - name: Show Downloaded Artifacts
+      - name: Show Downloaded Files
         run: |
-          echo "Artifacts downloaded:"
-          ls -R artifacts
+          echo "Current directory:"
+          pwd
+
+          echo ""
+          echo "Top level:"
+          ls -la
+
+          echo ""
+          echo "Find frontend:"
+          find . -type d -name frontend
+
+          echo ""
+          echo "Find dist:"
+          find . -type d -name dist
+
+          echo ""
+          echo "Find lambda-packages:"
+          find . -type d -name lambda-packages
+
+          echo ""
+          echo "Repository tree:"
+          find . -maxdepth 5 | sort
 
       - name: Deploy Lambda Functions
         run: |
