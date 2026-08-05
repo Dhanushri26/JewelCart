@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-FRONTEND_DIST="$ROOT_DIR/frontend/dist"
+FRONTEND_DIST="$ROOT_DIR/artifacts/frontend/dist"
 
 if [ ! -d "$FRONTEND_DIST" ]; then
   echo "Frontend build output not found at $FRONTEND_DIST"
