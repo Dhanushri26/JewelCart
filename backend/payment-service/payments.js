@@ -30,7 +30,7 @@ import {
 // BUSINESS LOGIC & PERMISSION DOMAINS
 // ==========================================
 const canReadPayments = (user) => user.isAdmin || user.isBusiness || user.isCustomer;
-const canManagePayments = (user) => user.isAdmin;
+const canManagePayments = (user) => user.isAdmin || user.isCustomer ;
 
 const canAccessPayment = (user, payment) => {
   if (!payment) return false;
@@ -92,7 +92,7 @@ const processOrderCreatedEvent = async (message) => {
   console.log("Order Found:", order.orderId);
   const paymentId = randomUUID();
 
-const paymentItem = {
+  const paymentItem = {
     PK: `PAYMENT#${paymentId}`,
     SK: "PAYMENT",
 
@@ -147,36 +147,8 @@ await docClient.send(
   })
 );
 
+
 console.log("Order Updated:", order.orderId);
-
-await sns.send(
-    new PublishCommand({
-
-        TopicArn: process.env.PAYMENT_TOPIC_ARN,
-
-        Subject: "Payment Successful",
-
-        Message: JSON.stringify({
-
-            eventType: "PAYMENT_SUCCESS",
-
-            paymentId,
-
-            orderId: order.orderId,
-
-            amount: order.totalAmount,
-
-            customerId: order.ownerId,
-
-            createdAt: new Date().toISOString()
-
-        })
-
-    })
-);
-
-console.log("SNS Event Published");
-
 };
 
 export const handler = async (event) => {
@@ -297,7 +269,7 @@ ExpressionAttributeValues: {
       if (!paymentId) return createErrorResponse(400, "Payment id is required");
 
       const res = await docClient.send(new GetCommand({
-        TableName: tableName,
+        TableName: paymentTable,
         Key: { PK: `PAYMENT#${paymentId}`, SK: "PAYMENT" }
       }));
 
@@ -314,14 +286,20 @@ ExpressionAttributeValues: {
     if (method === "PUT" && path.startsWith("/payments/")) {
       const paymentId = getPathParam(event, 1);
       if (!paymentId) return createErrorResponse(400, "Payment id is required");
-      if (!canManagePayments(userContext)) return createErrorResponse(403, "Access denied");
 
       const body = parseJsonBody(event);
       const existing = await docClient.send(new GetCommand({
-        TableName: tableName,
+        TableName: paymentTable,
         Key: { PK: `PAYMENT#${paymentId}`, SK: "PAYMENT" }
       }));
       if (!existing.Item || existing.Item.isDeleted) return createErrorResponse(404, "Payment record not found");
+
+      if (
+        !userContext.isAdmin &&
+        existing.Item.ownerId !== userContext.userId
+    ) {
+        return createErrorResponse(403, "Access denied");
+    }
 
       const payment = existing.Item;
       const now = new Date().toISOString();
@@ -341,28 +319,71 @@ ExpressionAttributeValues: {
       const exprString = `SET ${updates.join(", ")}, updatedAt = :now, updatedBy = :uid`;
 
       if (body.paymentStatus === PAYMENT_STATUS.PAID) {
-        // Execute an atomic cross-domain status cascade transaction
-        await docClient.send(new TransactWriteCommand({
-          TransactItems: [
-            {
-              Update: {
-                TableName: paymentTable,
-                Key: { PK: `PAYMENT#${paymentId}`, SK: "PAYMENT" },
-                UpdateExpression: exprString,
-                ExpressionAttributeValues: exprValues
-              }
-            },
-            {
-              Update: {
-                TableName: orderTable,
-                Key: { PK: `ORDER#${payment.orderId}`, SK: "METADATA" },
-                UpdateExpression: "SET paymentStatus = :status, updatedAt = :now",
-                ExpressionAttributeValues: { ":status": PAYMENT_STATUS.PAID, ":now": now }
-              }
-            }
-          ]
-        }));
-      } else {
+
+        await docClient.send(
+            new TransactWriteCommand({
+    
+                TransactItems: [
+                    {
+                        Update: {
+                            TableName: paymentTable,
+                            Key: {
+                                PK: `PAYMENT#${paymentId}`,
+                                SK: "PAYMENT"
+                            },
+                            UpdateExpression: exprString,
+                            ExpressionAttributeValues: exprValues
+                        }
+                    },
+                    {
+                        Update: {
+                            TableName: orderTable,
+                            Key: {
+                                PK: `ORDER#${payment.orderId}`,
+                                SK: "METADATA"
+                            },
+                            UpdateExpression:
+                                "SET paymentStatus = :status, updatedAt = :now",
+                            ExpressionAttributeValues: {
+                                ":status": PAYMENT_STATUS.PAID,
+                                ":now": now
+                            }
+                        }
+                    }
+                ]
+    
+            })
+        );
+    
+        console.log("=== BEFORE SNS ===");
+    
+        await sns.send(
+            new PublishCommand({
+    
+                TopicArn: process.env.PAYMENT_TOPIC_ARN,
+    
+                Subject: "ORDER_CONFIRMED",
+    
+                Message: JSON.stringify({
+    
+                    eventType: "ORDER_CONFIRMED",
+    
+                    orderId: payment.orderId,
+    
+                    paymentId: payment.paymentId,
+    
+                    customerId: payment.ownerId,
+    
+                    paymentStatus: PAYMENT_STATUS.PAID
+    
+                })
+    
+            })
+        );
+    
+        console.log("=== AFTER SNS ===");
+    
+    }else {
         await docClient.send(new UpdateCommand({
           TableName: paymentTable,
           Key: { PK: `PAYMENT#${paymentId}`, SK: "PAYMENT" },
@@ -390,14 +411,54 @@ ExpressionAttributeValues: {
       }));
       if (!orderRes.Item || orderRes.Item.isDeleted) return createErrorResponse(404, "Target checkout order missing");
 
-      return buildResponse(201, {
-        paymentId: randomUUID(),
-        orderId,
-        amount: orderRes.Item.totalAmount,
-        currency: "USD",
-        paymentStatus: PAYMENT_STATUS.PENDING,
-        clientSecret: `pi_test_${orderId}_secret`,
-      });
+      const paymentId = randomUUID();
+
+const paymentItem = {
+    PK: `PAYMENT#${paymentId}`,
+    SK: "PAYMENT",
+
+    paymentId,
+
+    orderId,
+
+    ownerId: userContext.userId,
+
+    businessId: userContext.businessId || null,
+
+    amount: orderRes.Item.totalAmount,
+
+    currency: "USD",
+
+    paymentMethod: "CARD",
+
+    paymentStatus: PAYMENT_STATUS.PENDING,
+
+    transactionReference: null,
+
+    isDeleted: false,
+
+    ...createAuditFields(userContext.userId)
+};
+
+await docClient.send(
+    new PutCommand({
+        TableName: paymentTable,
+        Item: paymentItem
+    })
+);
+
+return buildResponse(201, {
+    paymentId,
+    orderId,
+
+    amount: paymentItem.amount,
+
+    currency: paymentItem.currency,
+
+    paymentStatus: PAYMENT_STATUS.PENDING,
+
+    clientSecret: `pi_test_${orderId}_secret`
+});
     }
 
     // ------------------------------------------

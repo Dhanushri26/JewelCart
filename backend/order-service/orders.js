@@ -64,6 +64,19 @@ export const handler = async (event) => {
     const method = event?.httpMethod || event?.requestContext?.httpMethod || event?.requestContext?.http?.method;
     const path = event?.rawPath || event?.path || "";
     const userContext = extractUserContext(event);
+    console.log(
+      JSON.stringify(event.requestContext.authorizer, null, 2)
+    );
+    
+    console.log("========== HEADERS ==========");
+console.log(JSON.stringify(event.headers, null, 2));
+
+console.log("========== USER CONTEXT ==========");
+console.log(JSON.stringify(userContext, null, 2));
+
+console.log("========== CUSTOMER EMAIL ==========");
+console.log(userContext.email);
+
     const {
       docClient,
       orderTable,
@@ -221,6 +234,7 @@ export const handler = async (event) => {
           userId: userContext.userId,
           ownerId: userContext.userId,
           businessId: userContext.businessId || null,
+          customerEmail: userContext.email,
           items: resolvedItems,
           totalAmount,
           orderStatus,

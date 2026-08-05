@@ -162,55 +162,57 @@ export const parseIdempotencyKey = (event) => {
 
 export const extractUserContext = (event) => {
 
-  const headers = event?.headers || {};
+  const claims =
+    event?.requestContext?.authorizer?.jwt?.claims || {};
+
+    const headers = event?.headers || {};
+
+    const email =
+      headers["x-user-email"] ||
+      headers["X-User-Email"] ||
+      claims.email ||
+      null;
+
+  const groupsClaim = claims["cognito:groups"];
+
+  
+
+  const groups = Array.isArray(groupsClaim)
+    ? groupsClaim
+    : typeof groupsClaim === "string"
+      ? groupsClaim.split(",")
+      : [];
 
   const role =
-    headers["x-user-role"] ||
-    headers["X-User-Role"] ||
-    "Customer";
-
-  const userId =
-    headers["x-user-id"] ||
-    headers["X-User-Id"] ||
-    "anonymous";
-
-  const businessId =
-    headers["x-business-id"] ||
-    headers["X-Business-Id"] ||
-    null;
-
-  const creditLimit = Number(
-    headers["x-credit-limit"] || 0
-  );
-
-  const taxExempt =
-    String(headers["x-tax-exempt"] || "false")
-      .toLowerCase() === "true";
+    groups.includes("Admin")
+      ? "Admin"
+      : groups.includes("Business")
+        ? "Business"
+        : "Customer";
 
   return {
+    isAuthenticated: !!claims.sub,
 
-    isAuthenticated: userId !== "anonymous",
+    userId: claims.sub,
 
-    userId,
-
-    businessId,
+    email,
+    
+    businessId: claims["custom:businessId"] || null,
 
     role,
 
-    creditLimit,
+    creditLimit: Number(claims["custom:creditLimit"] || 0),
 
-    taxExempt,
+    taxExempt:
+      claims["custom:taxExempt"] === "true",
 
-    isAdmin: role === ROLES.ADMIN,
+    isAdmin: role === "Admin",
 
-    isBusiness: role === ROLES.BUSINESS,
+    isBusiness: role === "Business",
 
-    isCustomer: role === ROLES.CUSTOMER,
-
+    isCustomer: role === "Customer",
   };
-
 };
-
 
 // ==========================================
 // AUDIT HELPERS
