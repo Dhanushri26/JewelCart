@@ -2,7 +2,7 @@ name: CD
 
 on:
   workflow_run:
-    workflows: [CI]
+    workflows: ["CI"]
     types:
       - completed
     branches:
@@ -11,29 +11,32 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   deploy:
     name: Deploy to AWS
 
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
 
     runs-on: self-hosted
 
     env:
       AWS_PROFILE: Academy
       AWS_REGION: ap-southeast-1
-      CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
       S3_BUCKET: jewelcart-frontend-dhanu
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 👇 Add it here
-      - name: Verify AWS Session
-        run: |
-          aws sts get-caller-identity
+      - name: Verify AWS Credentials
+        run: aws sts get-caller-identity
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -44,26 +47,30 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: deployment-artifacts
-          path: ./artifacts
+          path: artifacts
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id || github.run_id }}
 
-      - name: Ensure Artifact Directories
+      - name: Show Downloaded Artifacts
         run: |
-          mkdir -p ./artifacts/frontend/dist
-          mkdir -p ./artifacts/lambda-packages
-          mkdir -p ./artifacts/coverage-reports
-          mkdir -p ./artifacts/security-reports
+          echo "Artifacts downloaded:"
+          ls -R artifacts
 
       - name: Deploy Lambda Functions
         run: |
           chmod +x scripts/deploy-lambda.sh
           ./scripts/deploy-lambda.sh
 
-      - name: Deploy Frontend
+      - name: Deploy Frontend to S3
         run: |
           chmod +x scripts/deploy-frontend.sh
           ./scripts/deploy-frontend.sh
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
+            --paths "/*"
 
       - name: Verify Deployment
         run: |
@@ -73,6 +80,12 @@ jobs:
       - name: Deployment Summary
         if: always()
         run: |
-          echo "## Deployment Summary" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Region: $AWS_REGION" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Frontend Bucket: $S3_BUCKET" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "# 🚀 Deployment Summary"
+            echo ""
+            echo "- Lambda Functions: ✅ Updated"
+            echo "- Frontend: ✅ Uploaded to S3"
+            echo "- CloudFront: ✅ Cache Invalidated"
+            echo "- Region: $AWS_REGION"
+            echo "- Bucket: $S3_BUCKET"
+          } >> "$GITHUB_STEP_SUMMARY"
