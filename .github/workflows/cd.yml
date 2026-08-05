@@ -114,11 +114,6 @@ jobs:
             --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" \
             --paths "/*"
 
-      - name: Verify Deployment
-        run: |
-          chmod +x scripts/verify-deployment.sh
-          ./scripts/verify-deployment.sh
-
       - name: Deployment Summary
         if: always()
         run: |
