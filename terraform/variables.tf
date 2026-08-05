@@ -37,11 +37,59 @@ variable "dynamodb_tables" {
   type        = any
   description = "Existing DynamoDB tables keyed by name."
   default = {
-    "jewelcart-cart"      = {}
-    "jewelcart-inventory" = {}
-    "jewelcart-orders"    = {}
-    "jewelcart-payments"  = {}
-    "jewelcart-products"  = {}
+    "jewelcart-cart" = {
+      hash_key  = "PK"
+      range_key = "SK"
+      attributes = [
+        { name = "PK", type = "S" },
+        { name = "SK", type = "S" }
+      ]
+    }
+    "jewelcart-inventory" = {
+      hash_key  = "PK"
+      range_key = "SK"
+      attributes = [
+        { name = "PK", type = "S" },
+        { name = "SK", type = "S" }
+      ]
+    }
+    "jewelcart-orders" = {
+      hash_key  = "PK"
+      range_key = "SK"
+      attributes = [
+        { name = "PK", type = "S" },
+        { name = "SK", type = "S" }
+      ]
+    }
+    "jewelcart-payments" = {
+      hash_key  = "PK"
+      range_key = "SK"
+      attributes = [
+        { name = "PK", type = "S" },
+        { name = "SK", type = "S" }
+      ]
+    }
+    "jewelcart-products" = {
+      hash_key  = "PK"
+      range_key = "SK"
+      attributes = [
+        { name = "PK", type = "S" },
+        { name = "SK", type = "S" },
+        { name = "titleNormalized", type = "S" }
+      ]
+      global_secondary_indexes = [
+        {
+          name            = "SK-index"
+          hash_key        = "SK"
+          projection_type = "ALL"
+        },
+        {
+          name            = "titleNormalized-index"
+          hash_key        = "titleNormalized"
+          projection_type = "ALL"
+        }
+      ]
+    }
     "jewelcart-users" = {
       billing_mode = "PAY_PER_REQUEST"
       hash_key     = "PK"
@@ -57,7 +105,11 @@ variable "dynamodb_tables" {
 variable "sqs_queues" {
   type        = any
   description = "Existing SQS queues keyed by name."
-  default     = { "jewelcart-order-queue" = {} }
+  default = {
+    "jewelcart-order-queue" = {
+      max_message_size = 1048576
+    }
+  }
 }
 
 variable "sns_topics" {
@@ -69,7 +121,14 @@ variable "sns_topics" {
 variable "s3_buckets" {
   type        = any
   description = "Existing S3 buckets keyed by name."
-  default     = { "jewelcart-frontend-dhanu" = {}, "jewelcart-invoices-dhanu26" = {} }
+  default = {
+    "jewelcart-frontend-dhanu" = {
+      versioning_status = "Enabled"
+    }
+    "jewelcart-invoices-dhanu26" = {
+      versioning_status = "Enabled"
+    }
+  }
 }
 
 variable "api_gateway" {
