@@ -140,7 +140,7 @@ export function ProfilePage() {
                     ₹{Number(order.totalAmount || 0).toLocaleString("en-IN")}
                   </span>
                   <span className="rounded-full bg-amber-100 px-3 py-1 text-xs text-amber-700">
-                    {order.orderStatus?.replace(/_/g, " ")}
+                    {order.orderStatus?.replaceAll(/_/g, " ")}
                   </span>
                 </div>
               ))}

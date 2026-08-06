@@ -15,7 +15,7 @@ FUNCTIONS=(
 
 for function_name in "${FUNCTIONS[@]}"; do
   package_path="$PACKAGE_DIR/${function_name}.zip"
-  if [ ! -f "$package_path" ]; then
+  if [[ ! -f "$package_path" ]]; then
     echo "Package not found for $function_name: $package_path"
     continue
   fi
@@ -32,7 +32,7 @@ for function_name in "${FUNCTIONS[@]}"; do
 
     echo "Attempt $attempt failed for $function_name"
     cat /tmp/${function_name}.err || true
-    if [ "$attempt" -eq 3 ]; then
+    if [[ "$attempt" -eq 3 ]]; then
       exit 1
     fi
     sleep 10

@@ -18,12 +18,12 @@ SERVICES=(cart-service product-service inventory-service payment-service order-s
 for service in "${SERVICES[@]}"; do
   SERVICE_DIR="$ROOT_DIR/backend/$service"
   FUNCTION_NAME="${SERVICE_TO_FUNCTION[$service]:-}" 
-  if [ ! -d "$SERVICE_DIR" ]; then
+  if [[ ! -d "$SERVICE_DIR" ]]; then
     echo "Skipping missing service directory: $SERVICE_DIR"
     continue
   fi
 
-  if [ -f "$SERVICE_DIR/package.json" ]; then
+  if [[ -f "$SERVICE_DIR/package.json" ]]; then
     echo "Packaging $service as $FUNCTION_NAME"
     (
       cd "$SERVICE_DIR"
@@ -38,12 +38,12 @@ wait
 mkdir -p "$ROOT_DIR/coverage-reports"
 mkdir -p "$ROOT_DIR/security-reports"
 
-if [ -d "$ROOT_DIR/frontend/coverage" ]; then
+if [[ -d "$ROOT_DIR/frontend/coverage" ]]; then
   cp -R "$ROOT_DIR/frontend/coverage" "$ROOT_DIR/coverage-reports/"
 fi
 
 for report in "$ROOT_DIR"/snyk-opensource.sarif "$ROOT_DIR"/snyk-code.sarif "$ROOT_DIR"/trivy-results.sarif; do
-  if [ -f "$report" ]; then
+  if [[ -f "$report" ]]; then
     cp "$report" "$ROOT_DIR/security-reports/"
   fi
 done
