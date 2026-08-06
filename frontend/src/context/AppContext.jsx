@@ -26,8 +26,8 @@ function decodeJwtPayload(token) {
   try {
     const base64 = token
       .split(".")[1]
-      .replaceAll(/-/g, "+")
-      .replaceAll(/_/g, "/");
+      .replaceAll("-", "+")
+      .replaceAll("_", "/");
     return JSON.parse(atob(base64));
   } catch {
     return {};

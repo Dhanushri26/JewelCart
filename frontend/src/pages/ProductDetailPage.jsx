@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Heart, Loader2, Share2, Star } from "lucide-react";
+import { ArrowLeft, Loader2, Share2, Star } from "lucide-react";
 import { getProductById, normalizeProduct } from "../api/products";
 import { useAppContext } from "../context/AppContext";
 

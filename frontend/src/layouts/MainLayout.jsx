@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { Heart, ShoppingBag, Search, UserRound, Menu } from "lucide-react";
+import { Heart, ShoppingBag, UserRound, Menu } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
 const navItems = [

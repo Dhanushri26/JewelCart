@@ -125,7 +125,7 @@ export function CheckoutPage() {
             <div className="flex justify-between border-b border-stone-200 py-3">
               <span className="font-semibold text-stone-900">Status</span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
-                {confirmedOrder.orderStatus?.replaceAll(/_/g, " ")}
+                {confirmedOrder.orderStatus?.replaceAll("_", " ")}
               </span>
             </div>
             <div className="flex justify-between pt-3">

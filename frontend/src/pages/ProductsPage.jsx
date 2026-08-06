@@ -1,10 +1,8 @@
 import { useMemo, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Heart, Search, SlidersHorizontal } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 import { getProducts } from "../api/products";
-import { addCartItem } from "../api/cart";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const categories = ["Jewelry", "Gemstones", "Collections", "New Arrivals"];
 

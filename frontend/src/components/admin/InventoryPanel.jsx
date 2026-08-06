@@ -1,8 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, Pencil, Search, AlertTriangle } from "lucide-react";
-import { CircleCheck, TriangleAlert, CircleX } from "lucide-react";
-import { getInventory } from "../../api/inventory";
-import { updateInventory } from "../../api/inventory";
+import {
+  Loader2,
+  Pencil,
+  Search,
+  AlertTriangle,
+  CircleCheck,
+  TriangleAlert,
+  CircleX,
+} from "lucide-react";
+import { getInventory, updateInventory } from "../../api/inventory";
 import { getProducts } from "../../api/products";
 
 export default function InventoryPanel() {
@@ -46,82 +52,6 @@ export default function InventoryPanel() {
       console.error(err);
     } finally {
       setLoading(false);
-    }
-  }
-  async function seedInventory() {
-    try {
-      const productsResponse = await getProducts();
-
-      const products = productsResponse.items || [];
-
-      let created = 0;
-
-      for (const product of products) {
-        try {
-          await createInventory({
-            productId: product.id,
-            productName: product.name,
-            availableQuantity: 100,
-            reservedQuantity: 0,
-            damagedQuantity: 0,
-            reorderThreshold: 10,
-          });
-
-          created++;
-        } catch (err) {
-          console.log(`Skipped ${product.id}`, err.response?.data);
-        }
-      }
-
-      alert(`Created ${created} inventory records`);
-
-      await loadInventory();
-    } catch (err) {
-      console.error(err);
-      alert("Inventory seeding failed.");
-    }
-  }
-  async function handleSyncInventory() {
-    try {
-      // Get all products
-      const productsResponse = await getProducts();
-
-      // Get current inventory
-      const inventoryResponse = await getInventory();
-
-      const products = productsResponse.items || [];
-      const inventory = inventoryResponse.items || [];
-
-      // Existing inventory product IDs
-      const existingInventory = new Set(
-        inventory.map((item) => item.productId),
-      );
-
-      let created = 0;
-
-      for (const product of products) {
-        if (existingInventory.has(product.id)) {
-          continue;
-        }
-
-        await createInventory({
-          productId: product.id,
-
-          availableQuantity: 0,
-          reservedQuantity: 0,
-          damagedQuantity: 0,
-          reorderThreshold: 5,
-        });
-
-        created++;
-      }
-
-      alert(`Created ${created} inventory records.`);
-
-      await loadInventory();
-    } catch (err) {
-      console.error(err);
-      alert("Inventory sync failed.");
     }
   }
 

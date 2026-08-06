@@ -4,7 +4,6 @@ import {
   Boxes,
   CreditCard,
   LayoutDashboard,
-  Loader2,
   Settings,
   ShoppingBag,
   Users,
@@ -13,7 +12,6 @@ import { useOutletContext } from "react-router-dom";
 import { getOrders } from "../api/orders";
 import { getInventory } from "../api/inventory";
 import { getPayments } from "../api/payments";
-import { useAppContext } from "../context/AppContext";
 import DashboardPanel from "../components/admin/DashboardPanel";
 import ProductsPanel from "../components/admin/ProductsPanel";
 import InventoryPanel from "../components/admin/InventoryPanel";
@@ -22,7 +20,6 @@ import PaymentsPanel from "../components/admin/PaymentsPanel";
 import CustomersPanel from "../components/admin/CustomersPanel";
 import AnalyticsPanel from "../components/admin/AnalyticsPanel";
 import SettingsPanel from "../components/admin/SettingsPanel";
-import AdminSidebar from "../components/admin/AdminSidebar";
 const NAV_ITEMS = [
   "Dashboard",
   "Products",

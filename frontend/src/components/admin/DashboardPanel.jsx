@@ -1,10 +1,4 @@
-import {
-  BarChart3,
-  Boxes,
-  CreditCard,
-  Loader2,
-  ShoppingBag,
-} from "lucide-react";
+import { Boxes, Loader2, ShoppingBag } from "lucide-react";
 
 export default function DashboardPanel({
   loading,

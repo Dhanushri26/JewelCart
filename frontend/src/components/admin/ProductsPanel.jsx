@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Plus, Search, Pencil, Trash2 } from "lucide-react";
-import { getProducts, updateProduct } from "../../api/products";
-import { createProduct } from "../../api/products";
+import { getProducts, updateProduct, createProduct } from "../../api/products";
 import { createInventory } from "../../api/inventory";
 
 export default function ProductsPanel() {

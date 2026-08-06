@@ -66,10 +66,6 @@ export default function AnalyticsPanel() {
       .reduce((sum, p) => sum + Number(p.amount || 0), 0);
   }, [payments]);
 
-  const pendingOrders = orders.filter(
-    (o) => o.orderStatus === "PENDING_PAYMENT",
-  ).length;
-
   const paidPayments = payments.filter(
     (p) => p.paymentStatus === "PAID",
   ).length;
@@ -115,23 +111,6 @@ export default function AnalyticsPanel() {
     {
       name: "Failed",
       value: payments.filter((p) => p.paymentStatus === "FAILED").length,
-    },
-  ];
-
-  const orderChart = [
-    {
-      name: "Pending",
-      value: orders.filter((o) => o.orderStatus === "PENDING_PAYMENT").length,
-    },
-
-    {
-      name: "Confirmed",
-      value: orders.filter((o) => o.orderStatus === "CONFIRMED").length,
-    },
-
-    {
-      name: "Cancelled",
-      value: orders.filter((o) => o.orderStatus === "CANCELLED").length,
     },
   ];
 
