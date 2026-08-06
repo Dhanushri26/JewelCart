@@ -53,7 +53,8 @@ jobs:
             npm ci --ignore-scripts --no-audit --no-fund
             npm rebuild esbuild lightningcss rolldown @tailwindcss/oxide
           else
-            npm install --no-audit --no-fund
+            npm install --ignore-scripts --no-audit --no-fund
+            npm rebuild esbuild lightningcss rolldown @tailwindcss/oxide
           fi
 
       - name: Run ESLint
@@ -107,10 +108,18 @@ jobs:
           name: frontend-coverage
           path: frontend/coverage
 
-      - name: Verify coverage files
+      - name: Verify coverage report
         run: |
+          echo "Coverage directory:"
           ls -R frontend/coverage
-          test -f frontend/coverage/lcov.info
+
+          if [ ! -f frontend/coverage/lcov.info ]; then
+            echo "ERROR: lcov.info not found"
+            exit 1
+          fi
+
+          echo "First lines of lcov.info:"
+          head -20 frontend/coverage/lcov.info
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5
@@ -186,10 +195,6 @@ jobs:
       - name: Set Snyk working directory
         run: echo "SNYK_WORKDIR=$GITHUB_WORKSPACE/frontend" >> "$GITHUB_ENV"
 
-      - name: Run npm audit
-        run: |
-          npm audit --audit-level=high --omit=dev || true
-        working-directory: frontend
 
       - name: Run npm audit
         run: |
@@ -277,6 +282,4 @@ jobs:
           path: |
             frontend/dist
             lambda-packages/*.zip
-            coverage-reports
-            security-reports
           retention-days: 7
