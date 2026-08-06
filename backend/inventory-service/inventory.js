@@ -1,10 +1,9 @@
 import { randomUUID } from "node:crypto";
-import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import {
   GetCommand,
-  QueryCommand,
   PutCommand,
-  UpdateCommand
+  UpdateCommand,
+  ScanCommand
 } from "@aws-sdk/lib-dynamodb";
 import {
   buildResponse,
@@ -14,7 +13,6 @@ import {
   getPathParam,
   parseJsonBody,
   createAuditFields,
-  updateAuditFields,
 } from "./shared.js";
 
 const normalizeQuantity = (v) => {

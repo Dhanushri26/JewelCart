@@ -1,7 +1,6 @@
 import { randomUUID } from "node:crypto";
 import {
   GetCommand,
-  QueryCommand,
   PutCommand,
   UpdateCommand,
   ScanCommand,
@@ -18,7 +17,6 @@ import {
   parseJsonBody,
   PAYMENT_STATUS,
   createAuditFields,
-  updateAuditFields,
 } from "./shared.js";
 
 import {
@@ -236,13 +234,6 @@ ExpressionAttributeValues: {
         payments = result.Items || [];
       } else {
         // Fallback to Scan with filter if secondary indexes are local (safeguarded pattern)
-        const filterExpression = userContext.isBusiness && userContext.businessId
-          ? "businessId = :bizId AND attribute_not_exists(isDeleted)"
-          : "ownerId = :ownerId AND attribute_not_exists(isDeleted)";
-          
-        const expressionValues = userContext.isBusiness && userContext.businessId
-          ? { ":bizId": userContext.businessId }
-          : { ":ownerId": userContext.userId };
 
         const result = await docClient.send(
   new ScanCommand({

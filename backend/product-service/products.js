@@ -323,7 +323,6 @@ try {
 
       // Dynamic patch tracking arrays
       let updateExp = "SET updatedAt = :u, updatedBy = :ub";
-      const expNames = {};
       const expValues = { ":u": new Date().toISOString(), ":ub": userContext.userId };
 
       if (body.title !== undefined) {

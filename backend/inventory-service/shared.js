@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
@@ -253,8 +252,6 @@ export const checkOrAcquireLock = async (idempotencyKey, context = {}) => {
 
   const {
     docClient,
-    inventoryTable,
-    productTable
 } = getDbClient();
   const ttl = Math.floor((Date.now() + (5 * 60 * 1000)) / 1000);
 
@@ -330,8 +327,6 @@ export const releaseOrResolveLock = async (
 
   const {
     docClient,
-    inventoryTable,
-    productTable
 } = getDbClient();
 
   const ttl = Math.floor((Date.now() + (5 * 60 * 1000)) / 1000);

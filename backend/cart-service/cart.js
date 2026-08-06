@@ -3,7 +3,6 @@ import {
   PutCommand, 
   GetCommand, 
   UpdateCommand,
-  BatchWriteCommand 
 } from "@aws-sdk/lib-dynamodb";
 import {
   buildResponse,
