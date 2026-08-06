@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import path from "node:path";
 import type { IncomingMessage, ServerResponse } from "node:http";
 
 const API_TARGET =
@@ -9,13 +10,69 @@ const API_TARGET =
 
 const config = {
   plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: [
+      {
+        find: /^react(\/.*)?$/,
+        replacement: `${path.resolve(__dirname, "node_modules/react").replace(/\\/g, "/")}$1`,
+      },
+      {
+        find: /^react-dom(\/.*)?$/,
+        replacement: `${path.resolve(__dirname, "node_modules/react-dom").replace(/\\/g, "/")}$1`,
+      },
+      {
+        find: /^aws-amplify(\/.*)?$/,
+        replacement: `${path.resolve(__dirname, "node_modules/aws-amplify/dist/esm").replace(/\\/g, "/")}$1`,
+      },
+      {
+        find: "@testing-library/react",
+        replacement: path
+          .resolve(__dirname, "node_modules/@testing-library/react")
+          .replace(/\\/g, "/"),
+      },
+      {
+        find: "@testing-library/user-event",
+        replacement: path
+          .resolve(__dirname, "node_modules/@testing-library/user-event")
+          .replace(/\\/g, "/"),
+      },
+      {
+        find: "@testing-library/jest-dom",
+        replacement: path
+          .resolve(__dirname, "node_modules/@testing-library/jest-dom")
+          .replace(/\\/g, "/"),
+      },
+      {
+        find: "tests/frontend",
+        replacement: path
+          .resolve(__dirname, "../tests/frontend")
+          .replace(/\\/g, "/"),
+      },
+    ],
+    dedupe: ["react", "react-dom"],
+  },
   test: {
     globals: true,
     environment: "jsdom",
     setupFiles: "./src/setupTests.js",
+    dir: "../tests/frontend",
+    include: ["**/*.{test,spec}.?(c|m)[jt]s?(x)"],
     css: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["lcov", "html", "json-summary", "text"],
+      all: false,
+      include: [
+        "src/api/**/*.{js,jsx,ts,tsx}",
+        "src/hooks/**/*.{js,jsx,ts,tsx}",
+        "src/utils/**/*.{js,jsx,ts,tsx}",
+      ],
+    },
   },
   server: {
+    fs: {
+      allow: [path.resolve(__dirname, "../tests/frontend")],
+    },
     proxy: {
       "/api": {
         target: API_TARGET,

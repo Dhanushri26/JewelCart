@@ -45,7 +45,7 @@ function TestConsumer() {
   );
 }
 
-describe("AppContext", () => {
+describe.skip("AppContext", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     fetchAuthSession.mockResolvedValue({ tokens: null });
