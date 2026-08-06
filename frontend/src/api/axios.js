@@ -21,7 +21,10 @@ const api = axios.create({
  */
 function decodeJwtPayload(token) {
   try {
-    const base64 = token.split(".")[1].replaceAll(/-/g, "+").replaceAll(/_/g, "/");
+    const base64 = token
+      .split(".")[1]
+      .replaceAll(/-/g, "+")
+      .replaceAll(/_/g, "/");
     const json = atob(base64);
     return JSON.parse(json);
   } catch {
