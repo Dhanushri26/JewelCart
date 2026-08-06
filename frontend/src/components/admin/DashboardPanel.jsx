@@ -101,7 +101,7 @@ export default function DashboardPanel({
                   </div>
 
                   <p className="mt-1 text-xs text-stone-500">
-                    {order.orderStatus?.replaceAll(/_/g, " ")} •{" "}
+                    {order.orderStatus?.replaceAll("_", " ")} •{" "}
                     {order.paymentStatus}
                   </p>
                 </div>
