@@ -145,7 +145,7 @@ jobs:
             npm ci --ignore-scripts --no-audit --no-fund
             npm rebuild esbuild lightningcss rolldown @tailwindcss/oxide
           else
-            npm install --no-audit --no-fund
+            npm install --ignore-scripts --no-audit --no-fund
           fi
 
       - name: Set Snyk working directory
@@ -206,7 +206,7 @@ jobs:
           if [ -f package-lock.json ]; then
             npm ci --ignore-scripts --no-audit --no-fund --include=optional
           else
-            npm install --no-audit --no-fund --include=optional
+            npm install --ignore-scripts --no-audit --no-fund --include=optional
           fi
           npm install --ignore-scripts --no-save \
           @rolldown/binding-linux-x64-gnu@1.1.5 \
