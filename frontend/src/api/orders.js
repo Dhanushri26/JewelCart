@@ -32,7 +32,7 @@ export const createOrder = async (data = {}) => {
   const response = await api.post("/orders", data, {
     headers: {
       // Idempotency key to prevent duplicate order creation on retry
-      "Idempotency-Key": `order-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      "Idempotency-Key": `order-${Date.now()}-${crypto.getRandomValues(new Uint32Array(1))[0].toString(36)}`,
     },
   });
   return response.data; // { order: { orderId, totalAmount, orderStatus, ... } }
