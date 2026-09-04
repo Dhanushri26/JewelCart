@@ -71,7 +71,7 @@ const config = {
   },
   server: {
     fs: {
-      allow: [path.resolve(__dirname, "../tests/frontend")],
+      allow: [path.resolve(__dirname, "../tests/frontend"), "."],
     },
     proxy: {
       "/api": {

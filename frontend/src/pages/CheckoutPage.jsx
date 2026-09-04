@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { CheckCircle2, Loader2, ShieldCheck, LockKeyhole } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 import { createPaymentIntent, updatePayment } from "../api/payments";
@@ -9,6 +9,7 @@ const STEPS = ["Shipping", "Billing", "Review", "Payment", "Confirmation"];
 
 export function CheckoutPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { cart, createOrder, user } = useAppContext();
 
   const [step, setStep] = useState(1);
@@ -26,6 +27,18 @@ export function CheckoutPage() {
     pincode: "",
   });
 
+  // Apply prefill from navigation state (e.g., voice assistant)
+  useEffect(() => {
+    try {
+      const state = location.state || {};
+      if (state.prefillShipping) {
+        setShipping((prev) => ({ ...prev, ...state.prefillShipping }));
+      }
+    } catch (err) {
+      // ignore
+    }
+  }, [location.state]);
+
   // ── Cart totals ──
   const subtotal = cart.reduce(
     (sum, item) =>
@@ -41,6 +54,24 @@ export function CheckoutPage() {
     setShipping((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // Continue button behaviour — support voice-initiated auto-place after shipping confirmation
+  const handleContinue = () => {
+    const next = Math.min(4, step + 1);
+
+    // If the user just confirmed shipping and this flow was initiated by voice,
+    // jump to payment and complete the order automatically.
+    if (step === 1 && location.state && location.state.voiceOrder) {
+      setStep(4);
+      // slight delay so the UI can update before processing
+      setTimeout(() => {
+        handlePlaceOrder();
+      }, 300);
+      return;
+    }
+
+    setStep(next);
+  };
+
   // ── Place order + create payment intent ──
   const handlePlaceOrder = async () => {
     if (cart.length === 0) {
@@ -53,9 +84,12 @@ export function CheckoutPage() {
 
     try {
       // 1) Create order from current cart (Lambda reads cart from DynamoDB)
-      const orderData = await createOrder(
-        `Ship to: ${shipping.fullName}, ${shipping.address}, ${shipping.city} - ${shipping.pincode}`,
-      );
+      const voiceNotes =
+        (location.state && location.state.voiceOrderNotes) || "";
+      const notes =
+        `Ship to: ${shipping.fullName}, ${shipping.address}, ${shipping.city} - ${shipping.pincode}` +
+        (voiceNotes ? ` | Voice: ${voiceNotes}` : "");
+      const orderData = await createOrder(notes);
       const order = orderData.order;
 
       // 2) Create internal payment intent
@@ -76,6 +110,19 @@ export function CheckoutPage() {
 
       setConfirmedOrder(order);
       setStep(5); // Jump to confirmation
+
+      // Speak minimal order confirmation details
+      try {
+        const spoken = `Order ${order.orderId?.substring(0, 8).toUpperCase()} confirmed. Total paid ${Number(order.totalAmount || total).toLocaleString("en-IN")} rupees. Thank you for shopping with JewelCart.`;
+        if (typeof window !== "undefined" && "speechSynthesis" in window) {
+          const u = new SpeechSynthesisUtterance(spoken);
+          u.lang = "en-US";
+          window.speechSynthesis.cancel();
+          window.speechSynthesis.speak(u);
+        }
+      } catch (e) {
+        // ignore speech errors
+      }
     } catch (err) {
       console.error("[Checkout] Order failed:", err);
       setError(
@@ -458,7 +505,7 @@ export function CheckoutPage() {
                   Go Back
                 </button>
                 <button
-                  onClick={() => setStep((p) => Math.min(4, p + 1))}
+                  onClick={() => handleContinue()}
                   className="rounded-2xl bg-stone-900 px-8 py-3.5 text-sm font-medium text-white transition-all hover:bg-stone-800 hover:shadow-md"
                   id="checkout-continue-btn"
                 >

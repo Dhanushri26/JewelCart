@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { Heart, ShoppingBag, UserRound, Menu } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
+import VoiceAssistant from "../components/ui/VoiceAssistant";
 
 const navItems = [
   "Home",
@@ -124,6 +125,7 @@ export function MainLayout() {
           </div>
         </div>
       </footer>
+      <VoiceAssistant />
     </div>
   );
 }
