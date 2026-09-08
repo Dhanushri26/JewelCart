@@ -105,7 +105,7 @@ export function HomePage() {
           className="overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-[0_25px_60px_rgba(97,70,38,0.12)]"
         >
           <img
-            src="https://heerhaarjewellery.com/wp-content/uploads/2026/03/Untitled-design.jpg"
+            src="https://jewelbuzz.in/wp-content/uploads/2026/08/WhatsApp-Image-2026-08-29-at-2.34.40-PM-1-1024x1024.jpeg"
             alt="Luxury jewelry showcase"
             className="h-full min-h-[420px] w-full object-cover"
           />

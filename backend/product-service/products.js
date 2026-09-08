@@ -127,6 +127,13 @@ export const handler = async (event) => {
     const { docClient, tableName } = getDbClient();
 
     // ------------------------------------------
+    // OPTIONS (CORS Preflight)
+    // ------------------------------------------
+    if (method === "OPTIONS") {
+      return buildResponse(200, "OK");
+    }
+
+    // ------------------------------------------
     // GET /products (List Catalogue)
     // ------------------------------------------
     if (method === "GET" && path === "/products") {

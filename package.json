@@ -1,0 +1,30 @@
+{
+  "name": "jewelcart",
+  "version": "1.0.0",
+  "description": "JewelCart is a production-ready, cloud-native luxury jewelry e-commerce platform built on a **React + Vite** frontend backed by **AWS Lambda microservices** connected through a single **AWS API Gateway**, with authentication handled by **AWS Cognito**.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "node docs-server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dhanushri26/JewelCart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Dhanushri26/JewelCart/issues"
+  },
+  "homepage": "https://github.com/Dhanushri26/JewelCart#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  }
+}

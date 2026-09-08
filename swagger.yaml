@@ -1,0 +1,394 @@
+openapi: 3.0.0
+info:
+  title: JewelCart API
+  description: API documentation for JewelCart services.
+  version: 1.0.0
+servers:
+  - url: https://fpgg90w2y8.execute-api.ap-southeast-1.amazonaws.com
+    description: API Gateway
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+  /products:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        '200':
+          description: A list of products
+    post:
+      summary: Create a product (admin only)
+      tags:
+        - Products
+      responses:
+        '201':
+          description: Product created
+  /products/{productId}:
+    get:
+      summary: Get product by ID
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+    put:
+      summary: Update product (admin only)
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product updated
+    delete:
+      summary: Delete product (admin only)
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product deleted
+
+  /cart:
+    get:
+      summary: Get cart items
+      tags:
+        - Cart
+      responses:
+        '200':
+          description: Cart items retrieved successfully
+
+  /cart/summary:
+    get:
+      summary: Get cart summary
+      tags:
+        - Cart
+      responses:
+        '200':
+          description: Cart summary retrieved successfully
+
+  /cart/items:
+    post:
+      summary: Add an item to the cart
+      tags:
+        - Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Item added
+
+  /cart/items/{productId}:
+    put:
+      summary: Update cart item quantity
+      tags:
+        - Cart
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Item updated
+    delete:
+      summary: Delete cart item
+      tags:
+        - Cart
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Item deleted
+
+  /cart/clear:
+    delete:
+      summary: Clear cart items
+      tags:
+        - Cart
+      responses:
+        '200':
+          description: Cart cleared
+
+  /cart/bulk-import:
+    post:
+      summary: Bulk import cart items
+      tags:
+        - Cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  productId:
+                    type: string
+                  quantity:
+                    type: integer
+      responses:
+        '200':
+          description: Items imported
+
+  /orders:
+    get:
+      summary: Get orders
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: Orders retrieved
+    post:
+      summary: Create an order
+      tags:
+        - Orders
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: string
+      responses:
+        '201':
+          description: Order created
+
+  /orders/{orderId}:
+    get:
+      summary: Get order by ID
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order retrieved
+    put:
+      summary: Update order (admin only)
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order updated
+    delete:
+      summary: Delete order (admin only)
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order deleted
+
+  /orders/{orderId}/cancel:
+    put:
+      summary: Cancel an order
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order cancelled
+
+  /payments:
+    get:
+      summary: Get payments
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Payments retrieved
+    post:
+      summary: Create payment
+      tags:
+        - Payments
+      responses:
+        '201':
+          description: Payment created
+
+  /payments/intent:
+    post:
+      summary: Create payment intent
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  type: string
+      responses:
+        '200':
+          description: Payment intent created
+
+  /payments/verify:
+    post:
+      summary: Verify payment
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Payment verified
+
+  /payments/capture:
+    post:
+      summary: Capture payment
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Payment captured
+
+  /payments/refund:
+    post:
+      summary: Refund payment
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Payment refunded
+
+  /payments/cancel:
+    post:
+      summary: Cancel payment
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Payment cancelled
+
+  /payments/po-verify:
+    post:
+      summary: Verify purchase order
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: PO verified
+
+  /payments/webhook:
+    post:
+      summary: Payment webhook
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Webhook received
+
+  /inventory:
+    get:
+      summary: Get inventory
+      tags:
+        - Inventory
+      responses:
+        '200':
+          description: Inventory retrieved
+    post:
+      summary: Create inventory record
+      tags:
+        - Inventory
+      responses:
+        '201':
+          description: Inventory record created
+
+  /inventory/{productId}:
+    get:
+      summary: Get inventory by product ID
+      tags:
+        - Inventory
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Inventory retrieved
+
+  /inventory/reserve:
+    patch:
+      summary: Reserve inventory
+      tags:
+        - Inventory
+      responses:
+        '200':
+          description: Inventory reserved
+
