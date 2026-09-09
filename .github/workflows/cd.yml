@@ -8,7 +8,7 @@ on:
     branches:
       - main
       - develop
-
+      - deployment
   workflow_dispatch:
 
 permissions:
